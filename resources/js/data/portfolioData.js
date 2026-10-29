@@ -213,58 +213,58 @@ export const awardsData = [
 
 export const spotifyTracks = [
   {
-    id: "viva-la-vida",
-    title: "Viva La Vida",
-    artist: "Coldplay",
-    vibe: "Concert Band & Strings Edition",
-    duration: "4:02",
-    spotifyTrackId: "1theKag27X3KrkQ0x0jM4K",
-    embedUrl: "https://open.spotify.com/embed/track/1theKag27X3KrkQ0x0jM4K?utm_source=generator&theme=0",
-    cover: "/assets/goc_event_stage.jpg",
-    melody: [277.18, 311.13, 415.30, 369.99, 349.23, 277.18, 311.13, 261.63, 277.18, 349.23, 415.30]
-  },
-  {
-    id: "sky-full-of-stars",
-    title: "A Sky Full of Stars",
-    artist: "Coldplay",
-    vibe: "Event Anthem & Uplifting",
-    duration: "4:28",
-    spotifyTrackId: "0FDzzruQSportVriGQI9jl",
-    embedUrl: "https://open.spotify.com/embed/track/0FDzzruQSportVriGQI9jl?utm_source=generator&theme=0",
-    cover: "/assets/kanzler_grill_flame.jpg",
-    melody: [329.63, 392.00, 440.00, 493.88, 587.33, 493.88, 440.00, 392.00, 440.00, 493.88]
-  },
-  {
-    id: "cant-stop-the-feeling",
-    title: "Can't Stop the Feeling!",
-    artist: "Justin Timberlake",
-    vibe: "Event Energy & Crowd Engagement",
-    duration: "3:56",
-    spotifyTrackId: "1WkMMavIMc4jx8A5WTHkG5",
-    embedUrl: "https://open.spotify.com/embed/track/1WkMMavIMc4jx8A5WTHkG5?utm_source=generator&theme=0",
-    cover: "/assets/goc_roadshow.jpg",
-    melody: [261.63, 293.66, 329.63, 392.00, 440.00, 392.00, 329.63, 293.66, 329.63, 392.00]
-  },
-  {
-    id: "uptown-funk",
-    title: "Uptown Funk",
-    artist: "Mark Ronson ft. Bruno Mars",
-    vibe: "Brass Groove & Mass Festival",
-    duration: "4:30",
-    spotifyTrackId: "32OlwWuMpZ6b0aN2RZOeMS",
-    embedUrl: "https://open.spotify.com/embed/track/32OlwWuMpZ6b0aN2RZOeMS?utm_source=generator&theme=0",
-    cover: "/assets/frontCard.png",
-    melody: [293.66, 293.66, 349.23, 392.00, 440.00, 523.25, 440.00, 392.00, 349.23, 293.66]
-  },
-  {
-    id: "high-hopes",
-    title: "High Hopes",
-    artist: "Panic! At The Disco",
-    vibe: "Campaign Launch & Victory",
-    duration: "3:10",
-    spotifyTrackId: "1rqqCSm0Qe4I9rUvWnC9AV",
-    embedUrl: "https://open.spotify.com/embed/track/1rqqCSm0Qe4I9rUvWnC9AV?utm_source=generator&theme=0",
+    id: "blinding-lights",
+    title: "Blinding Lights",
+    artist: "The Weeknd",
+    vibe: "Peak Event Energy & Stadium Rush",
+    duration: "3:20",
+    spotifyTrackId: "0VjIjW4GlUZAMYd2vXMi3b",
+    embedUrl: "https://open.spotify.com/embed/track/0VjIjW4GlUZAMYd2vXMi3b?utm_source=generator&theme=0",
     cover: "/assets/steve.png",
-    melody: [349.23, 392.00, 440.00, 523.25, 587.33, 523.25, 440.00, 392.00, 440.00, 523.25]
+    melody: [329.63, 392.00, 440.00, 493.88, 440.00, 392.00, 329.63, 392.00]
+  },
+  {
+    id: "as-it-was",
+    title: "As It Was",
+    artist: "Harry Styles",
+    vibe: "Youthful & Dynamic Roadshow",
+    duration: "2:47",
+    spotifyTrackId: "4Dvkj6JhhA12EX05QKiLda",
+    embedUrl: "https://open.spotify.com/embed/track/4Dvkj6JhhA12EX05QKiLda?utm_source=generator&theme=0",
+    cover: "/assets/steve.png",
+    melody: [349.23, 392.00, 440.00, 523.25, 440.00, 392.00, 349.23, 440.00]
+  },
+  {
+    id: "levitating",
+    title: "Levitating",
+    artist: "Dua Lipa",
+    vibe: "Pop Disco & Crowd Engagement",
+    duration: "3:23",
+    spotifyTrackId: "463CkQjx2Zk1yXoBuierM9",
+    embedUrl: "https://open.spotify.com/embed/track/463CkQjx2Zk1yXoBuierM9?utm_source=generator&theme=0",
+    cover: "/assets/steve.png",
+    melody: [293.66, 329.63, 369.99, 440.00, 369.99, 329.63, 293.66, 369.99]
+  },
+  {
+    id: "starboy",
+    title: "Starboy",
+    artist: "The Weeknd ft. Daft Punk",
+    vibe: "High-Octane Brand Launch",
+    duration: "3:50",
+    spotifyTrackId: "7MXVkk9YM5IZxh0wAE2Upv",
+    embedUrl: "https://open.spotify.com/embed/track/7MXVkk9YM5IZxh0wAE2Upv?utm_source=generator&theme=0",
+    cover: "/assets/steve.png",
+    melody: [261.63, 293.66, 329.63, 392.00, 329.63, 293.66, 261.63, 329.63]
+  },
+  {
+    id: "shape-of-you",
+    title: "Shape of You",
+    artist: "Ed Sheeran",
+    vibe: "Festive Acoustic & Mass Activation",
+    duration: "3:53",
+    spotifyTrackId: "7qiZfU4dY1lWllzX7mPBI3",
+    embedUrl: "https://open.spotify.com/embed/track/7qiZfU4dY1lWllzX7mPBI3?utm_source=generator&theme=0",
+    cover: "/assets/steve.png",
+    melody: [277.18, 311.13, 369.99, 415.30, 369.99, 311.13, 277.18, 369.99]
   }
 ];

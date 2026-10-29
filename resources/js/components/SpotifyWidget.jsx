@@ -219,16 +219,16 @@ export default function SpotifyWidget({ playBeep }) {
               <div className="space-y-4">
                 <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-800/80">
                   <div className="flex items-center gap-3 sm:gap-4 min-w-0">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-emerald-500/30 shadow-lg shrink-0 relative group">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-emerald-500/40 shadow-lg shrink-0 relative group bg-slate-900">
                       <img
-                        src={currentTrack.cover}
-                        alt="Playlist Cover"
-                        className="w-full h-full object-cover"
+                        src="/assets/steve.png"
+                        alt="Steve Marvin"
+                        className="w-full h-full object-cover object-top"
                         onError={(e) => {
-                          e.target.src = '/assets/frontCard.png';
+                          e.target.src = '/assets/me.png';
                         }}
                       />
-                      <div className="absolute inset-0 bg-slate-950/20" />
+                      <div className="absolute inset-0 bg-slate-950/10 pointer-events-none" />
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
@@ -244,7 +244,7 @@ export default function SpotifyWidget({ playBeep }) {
                         Soundtrack of Events
                       </h3>
                       <p className="text-xs text-slate-400 truncate">
-                        Kurasi Steve Marvin • Brand Activation
+                        Steve Marvin • Brand Activation
                       </p>
                     </div>
                   </div>
@@ -389,7 +389,17 @@ export default function SpotifyWidget({ playBeep }) {
                 <div className="flex items-center justify-between">
                   {/* Left: Now Playing Song Info */}
                   <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                    <Music2 className={`w-4 h-4 text-emerald-400 shrink-0 ${isPlaying ? 'animate-bounce' : ''}`} />
+                    <div className="w-8 h-8 rounded-lg overflow-hidden border border-emerald-500/30 shrink-0 relative bg-slate-900 hidden sm:block">
+                      <img
+                        src="/assets/steve.png"
+                        alt="Steve Marvin"
+                        className="w-full h-full object-cover object-top"
+                        onError={(e) => {
+                          e.target.src = '/assets/me.png';
+                        }}
+                      />
+                    </div>
+                    <Music2 className={`w-4 h-4 text-emerald-400 shrink-0 sm:hidden ${isPlaying ? 'animate-bounce' : ''}`} />
                     <div className="min-w-0 truncate">
                       <p className="text-xs font-bold text-white truncate">
                         {currentTrack.title}
