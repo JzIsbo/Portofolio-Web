@@ -51,24 +51,25 @@ export default function Portfolio({ playBeep }) {
   };
 
   return (
-    <section id="Portofolio" className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
+    <section id="Portofolio" className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden w-full min-w-0">
       {/* Section Header */}
-      <div className="flex flex-col items-center text-center space-y-2.5 sm:space-y-3 mb-10 sm:mb-12">
+      <div className="flex flex-col items-center text-center space-y-2.5 sm:space-y-3 mb-10 sm:mb-12 w-full min-w-0">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-xs font-mono text-indigo-400">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Karya & Kemampuan</span>
         </div>
-        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-          Portofolio <span className="gradient-text">Aktivasi & Kampanye Brand</span>
+        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight break-words">
+          Portofolio <span className="gradient-text inline-block">Aktivasi & Kampanye Brand</span>
         </h2>
-        <p className="text-slate-400 text-xs sm:text-base max-w-2xl px-2">
+        <p className="text-slate-400 text-xs sm:text-base max-w-2xl px-2 break-words">
           Koleksi aktivasi brand berskala nasional, strategi event management, serta program experiential marketing yang sukses menggerakkan interaksi konsumen.
         </p>
       </div>
 
       {/* Tab Controls */}
-      <div className="flex justify-start sm:justify-center mb-8 sm:mb-10 overflow-x-auto max-w-full pb-2 scrollbar-none px-2 -mx-2">
-        <div className="inline-flex items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 rounded-full bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-lg shrink-0">
+      <div className="w-full max-w-full min-w-0 overflow-x-auto pb-2 scrollbar-none mb-8 sm:mb-10 px-1">
+        <div className="flex justify-start sm:justify-center min-w-max mx-auto px-1">
+          <div className="inline-flex items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 rounded-full bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-lg shrink-0">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -97,24 +98,25 @@ export default function Portfolio({ playBeep }) {
               </button>
             );
           })}
+          </div>
         </div>
       </div>
 
       {/* --- Tab 1: PROJECTS VIEW --- */}
       {activeTab === 'projects' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 text-left w-full min-w-0">
           {projectsData.map((project) => (
             <article
               key={project.id}
               onClick={() => handleOpenModal(project)}
-              className="group relative rounded-3xl bg-slate-900/70 border border-slate-800 hover:border-sky-500/50 p-5 flex flex-col justify-between overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-sky-500/10 backdrop-blur-md"
+              className="group relative rounded-2xl sm:rounded-3xl bg-slate-900/70 border border-slate-800 hover:border-sky-500/50 p-4 sm:p-5 flex flex-col justify-between overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-sky-500/10 backdrop-blur-md w-full min-w-0"
             >
               {/* Subtle top glow line */}
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-sky-500/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
               <div>
                 {/* Image Preview Container */}
-                <div className="relative aspect-video rounded-2xl overflow-hidden bg-slate-950 mb-5 border border-slate-800/80 group-hover:border-sky-500/30 transition-colors">
+                <div className="relative aspect-video rounded-xl sm:rounded-2xl overflow-hidden bg-slate-950 mb-4 sm:mb-5 border border-slate-800/80 group-hover:border-sky-500/30 transition-colors">
                   <img
                     src={project.image}
                     alt={project.title}
@@ -130,27 +132,27 @@ export default function Portfolio({ playBeep }) {
                 </div>
 
                 {/* Title & Desc */}
-                <h3 className="text-xl font-bold text-white group-hover:text-sky-400 transition-colors mb-2">
+                <h3 className="text-lg sm:text-xl font-bold text-white group-hover:text-sky-400 transition-colors mb-2 break-words leading-snug">
                   {project.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4 line-clamp-3">
+                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed mb-4 line-clamp-3 break-words">
                   {project.shortDesc}
                 </p>
               </div>
 
               {/* Bottom Tags & Button */}
               <div className="pt-4 border-t border-slate-800/80 space-y-4">
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1.5 max-w-full">
                   {project.tags.slice(0, 4).map((tag, i) => (
                     <span
                       key={i}
-                      className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-800/90 text-slate-300 border border-slate-700/50"
+                      className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-800/90 text-slate-300 border border-slate-700/50 break-words"
                     >
                       {tag}
                     </span>
                   ))}
                   {project.tags.length > 4 && (
-                    <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-800/50 text-slate-400">
+                    <span className="px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-800/50 text-slate-400 shrink-0">
                       +{project.tags.length - 4}
                     </span>
                   )}

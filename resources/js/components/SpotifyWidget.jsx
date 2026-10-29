@@ -15,17 +15,17 @@ export default function SpotifyWidget({ playBeep }) {
   const [activeTrackIndex, setActiveTrackIndex] = useState(0);
 
   return (
-    <section id="Spotify" className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
+    <section id="Spotify" className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden w-full min-w-0">
       {/* Background ambient neon glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Main Spotify Card Container */}
-      <div className="relative rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-900/90 via-[#07131e]/90 to-slate-950/95 border border-sky-500/25 p-4 sm:p-8 lg:p-12 shadow-2xl backdrop-blur-xl overflow-hidden text-left">
+      <div className="relative rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-900/90 via-[#07131e]/90 to-slate-950/95 border border-sky-500/25 p-4 sm:p-8 lg:p-12 shadow-2xl backdrop-blur-xl overflow-hidden text-left w-full min-w-0">
         {/* Subtle decorative concentric circles */}
         <div className="absolute -top-24 -left-24 w-80 h-80 rounded-full border border-sky-500/10 pointer-events-none" />
         <div className="absolute -bottom-24 -right-24 w-80 h-80 rounded-full border border-emerald-500/10 pointer-events-none" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center w-full min-w-0">
           {/* Left Column: Heading, Subtitle & Interactive Equalizer */}
           <div className="lg:col-span-5 space-y-4 sm:space-y-6">
             {/* Eyebrow with Animated Equalizer Bars */}

@@ -68,7 +68,7 @@ const indexHtmlContent = `<!DOCTYPE html>
 <html lang="id" class="dark scroll-smooth">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
     <meta name="theme-color" content="#050510" />
 
     <title>Steve Marvin | Supervisor Brand Activation & Event Management</title>
@@ -91,7 +91,7 @@ const indexHtmlContent = `<!DOCTYPE html>
     <link rel="stylesheet" crossorigin href="/build/${cssFile}">
     <script type="module" crossorigin src="/build/${jsFile}"></script>
   </head>
-  <body class="bg-[#050510] text-[#e2e8f0] selection:bg-sky-500/30 selection:text-white font-sans antialiased overflow-x-hidden min-h-screen">
+  <body class="bg-[#050510] text-[#e2e8f0] selection:bg-sky-500/30 selection:text-white font-sans antialiased overflow-x-hidden min-h-screen w-full max-w-full">
     <div id="root"></div>
   </body>
 </html>

@@ -47,16 +47,16 @@ export default function Hero({ playBeep }) {
       <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-72 sm:w-96 h-72 sm:h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute top-1/3 right-1/4 w-60 sm:w-80 h-60 sm:h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-6 items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full min-w-0 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-6 items-center">
         {/* Left Column: Bio & CTAs */}
-        <div className="lg:col-span-7 flex flex-col items-start z-10 space-y-4 sm:space-y-6 text-left">
+        <div className="lg:col-span-7 flex flex-col items-start z-10 space-y-4 sm:space-y-6 text-left w-full min-w-0">
           {/* Status Pill */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 border border-slate-700/60 backdrop-blur-md shadow-sm">
-            <span className="relative flex h-2 w-2">
+          <div className="inline-flex max-w-full items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 border border-slate-700/60 backdrop-blur-md shadow-sm">
+            <span className="relative flex h-2 w-2 shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
             </span>
-            <span className="text-xs font-mono text-slate-300">
+            <span className="text-[11px] sm:text-xs font-mono text-slate-300 truncate">
               {personalInfo.status}
             </span>
           </div>

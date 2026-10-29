@@ -55,22 +55,22 @@ export default function Contact({ playBeep }) {
   };
 
   return (
-    <section id="Contact" className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
+    <section id="Contact" className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden w-full min-w-0">
       {/* Section Header */}
-      <div className="flex flex-col items-center text-center space-y-2.5 sm:space-y-3 mb-10 sm:mb-16">
+      <div className="flex flex-col items-center text-center space-y-2.5 sm:space-y-3 mb-10 sm:mb-16 w-full min-w-0">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-xs font-mono text-cyan-400">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Mari Terhubung</span>
         </div>
-        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-          Punya Ide Proyek? <span className="gradient-text">Hubungi Saya</span>
+        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight break-words">
+          Punya Ide Proyek? <span className="gradient-text inline-block">Hubungi Saya</span>
         </h2>
-        <p className="text-slate-400 text-xs sm:text-base max-w-xl px-2">
+        <p className="text-slate-400 text-xs sm:text-base max-w-xl px-2 break-words">
           Terbuka untuk kolaborasi aktivasi brand, manajemen event offline berskala nasional, dan kemitraan strategis.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 text-left">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 text-left w-full min-w-0">
         {/* Left Column: Direct Partnership & Social Cards */}
         <div className="lg:col-span-5 space-y-4">
           {/* Brand Activation Partnership Card */}

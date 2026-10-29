@@ -63,23 +63,23 @@ export default function About({ playBeep }) {
   };
 
   return (
-    <section id="About" className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
+    <section id="About" className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden w-full min-w-0">
       {/* Section Header */}
-      <div className="flex flex-col items-center text-center space-y-2.5 sm:space-y-3 mb-12 sm:mb-16">
+      <div className="flex flex-col items-center text-center space-y-2.5 sm:space-y-3 mb-12 sm:mb-16 w-full min-w-0">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/25 text-xs font-mono text-rose-400">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Tentang Saya</span>
         </div>
-        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-          Menghubungkan <span className="gradient-text">Brand & Konsumen</span>
+        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight break-words">
+          Menghubungkan <span className="gradient-text inline-block">Brand & Konsumen</span>
         </h2>
-        <p className="text-slate-400 text-xs sm:text-base max-w-2xl px-2">
+        <p className="text-slate-400 text-xs sm:text-base max-w-2xl px-2 break-words">
           Eksplorasi strategi aktivasi brand, manajemen event berskala nasional, dan experiential marketing yang berkesan.
         </p>
       </div>
 
       {/* Main Grid: Portrait/Visual & Story Bio */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center mb-16 sm:mb-20">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center mb-16 sm:mb-20 w-full min-w-0">
         {/* Left: Creative Interactive Spider-Man Portrait Stage */}
         <div className="lg:col-span-5 flex flex-col items-center w-full">
           <div
@@ -204,7 +204,7 @@ export default function About({ playBeep }) {
       </div>
 
       {/* Education & Experience Columns */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-left">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-left w-full min-w-0">
         {/* Education Group */}
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-lg sm:text-xl font-bold text-white mb-2">
