@@ -6,7 +6,8 @@
         "start": "concurrently \"php artisan serve\" \"vite\" --names=\"Laravel,Vite\" -c \"cyan,magenta\"",
         "build": "vite build && node scripts/build-dist.js",
         "dev": "vite",
-        "serve": "php artisan serve"
+        "serve": "php artisan serve",
+        "preview": "vite preview --outDir dist"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
