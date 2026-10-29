@@ -213,58 +213,58 @@ export const awardsData = [
 
 export const spotifyTracks = [
   {
-    id: "blinding-lights",
-    title: "Blinding Lights",
-    artist: "The Weeknd",
-    vibe: "Peak Event Energy & Stadium Rush",
-    duration: "3:20",
-    spotifyTrackId: "0VjIjW4GlUZAMYd2vXMi3b",
-    embedUrl: "https://open.spotify.com/embed/track/0VjIjW4GlUZAMYd2vXMi3b?utm_source=generator&theme=0",
-    cover: "/assets/steve.png",
-    melody: [329.63, 392.00, 440.00, 493.88, 440.00, 392.00, 329.63, 392.00]
+    id: "die-with-a-smile",
+    title: "Die With A Smile",
+    artist: "Lady Gaga & Bruno Mars",
+    vibe: "Romantic Soul & Global Mega Hit",
+    duration: "4:11",
+    audioUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/07/6a/99/076a99ed-b946-431b-6f1f-54fa187ca5bd/mzaf_8102882277995122875.plus.aac.p.m4a",
+    spotifyTrackId: "2plbrEY59IikOBgB57599W",
+    embedUrl: "https://open.spotify.com/embed/track/2plbrEY59IikOBgB57599W?utm_source=generator&theme=0",
+    cover: "/assets/steve.png"
   },
   {
-    id: "as-it-was",
-    title: "As It Was",
-    artist: "Harry Styles",
-    vibe: "Youthful & Dynamic Roadshow",
-    duration: "2:47",
-    spotifyTrackId: "4Dvkj6JhhA12EX05QKiLda",
-    embedUrl: "https://open.spotify.com/embed/track/4Dvkj6JhhA12EX05QKiLda?utm_source=generator&theme=0",
-    cover: "/assets/steve.png",
-    melody: [349.23, 392.00, 440.00, 523.25, 440.00, 392.00, 349.23, 440.00]
+    id: "birds-of-a-feather",
+    title: "BIRDS OF A FEATHER",
+    artist: "Billie Eilish",
+    vibe: "Indie Pop & Global #1 Smash",
+    duration: "3:03",
+    audioUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/34/31/d3/3431d34e-847f-5d66-df83-0bce688d997e/mzaf_18106743962423782018.plus.aac.p.m4a",
+    spotifyTrackId: "6dOtVTDmmpWGvwwmTDTYIx",
+    embedUrl: "https://open.spotify.com/embed/track/6dOtVTDmmpWGvwwmTDTYIx?utm_source=generator&theme=0",
+    cover: "/assets/steve.png"
   },
   {
-    id: "levitating",
-    title: "Levitating",
-    artist: "Dua Lipa",
-    vibe: "Pop Disco & Crowd Engagement",
-    duration: "3:23",
-    spotifyTrackId: "463CkQjx2Zk1yXoBuierM9",
-    embedUrl: "https://open.spotify.com/embed/track/463CkQjx2Zk1yXoBuierM9?utm_source=generator&theme=0",
-    cover: "/assets/steve.png",
-    melody: [293.66, 329.63, 369.99, 440.00, 369.99, 329.63, 293.66, 369.99]
+    id: "espresso",
+    title: "Espresso",
+    artist: "Sabrina Carpenter",
+    vibe: "Pop Groove & Event Sensation",
+    duration: "2:55",
+    audioUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/99/da/ff/99daffce-cdde-59c6-5ae0-7f922ce411a8/mzaf_5621292401829922816.plus.aac.p.m4a",
+    spotifyTrackId: "2qSk1G5ikKnR9pA0sCg57E",
+    embedUrl: "https://open.spotify.com/embed/track/2qSk1G5ikKnR9pA0sCg57E?utm_source=generator&theme=0",
+    cover: "/assets/steve.png"
   },
   {
-    id: "starboy",
-    title: "Starboy",
-    artist: "The Weeknd ft. Daft Punk",
-    vibe: "High-Octane Brand Launch",
-    duration: "3:50",
-    spotifyTrackId: "7MXVkk9YM5IZxh0wAE2Upv",
-    embedUrl: "https://open.spotify.com/embed/track/7MXVkk9YM5IZxh0wAE2Upv?utm_source=generator&theme=0",
-    cover: "/assets/steve.png",
-    melody: [261.63, 293.66, 329.63, 392.00, 329.63, 293.66, 261.63, 329.63]
+    id: "cruel-summer",
+    title: "Cruel Summer",
+    artist: "Taylor Swift",
+    vibe: "High-Energy Stadium Anthem",
+    duration: "2:58",
+    audioUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/44/af/81/44af8168-9609-1b85-5048-ada08dceacf3/mzaf_1341699644335558812.plus.aac.p.m4a",
+    spotifyTrackId: "1BxfuPKGuaTgP7aM0fbdwr",
+    embedUrl: "https://open.spotify.com/embed/track/1BxfuPKGuaTgP7aM0fbdwr?utm_source=generator&theme=0",
+    cover: "/assets/steve.png"
   },
   {
-    id: "shape-of-you",
-    title: "Shape of You",
-    artist: "Ed Sheeran",
-    vibe: "Festive Acoustic & Mass Activation",
-    duration: "3:53",
-    spotifyTrackId: "7qiZfU4dY1lWllzX7mPBI3",
-    embedUrl: "https://open.spotify.com/embed/track/7qiZfU4dY1lWllzX7mPBI3?utm_source=generator&theme=0",
-    cover: "/assets/steve.png",
-    melody: [277.18, 311.13, 369.99, 415.30, 369.99, 311.13, 277.18, 369.99]
+    id: "stay",
+    title: "STAY",
+    artist: "The Kid LAROI & Justin Bieber",
+    vibe: "Fast-Paced Mass Festival Hit",
+    duration: "2:21",
+    audioUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/d7/4a/84/d74a84d5-9afa-761e-b632-baab55c2a23b/mzaf_11865500880477235553.plus.aac.p.m4a",
+    spotifyTrackId: "5HCyWlXZPP0y6Gqq8TgA20",
+    embedUrl: "https://open.spotify.com/embed/track/5HCyWlXZPP0y6Gqq8TgA20?utm_source=generator&theme=0",
+    cover: "/assets/steve.png"
   }
 ];

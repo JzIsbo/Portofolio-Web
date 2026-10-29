@@ -31,80 +31,45 @@ export default function SpotifyWidget({ playBeep }) {
 
   const currentTrack = spotifyTracks[activeTrackIndex] || spotifyTracks[0];
 
-  // Web Audio Synthesizer Loop Ref
-  const audioCtxRef = useRef(null);
-  const loopIntervalRef = useRef(null);
-  const progressIntervalRef = useRef(null);
-  const noteIndexRef = useRef(0);
+  // Real HTML5 Audio Element Ref
+  const audioRef = useRef(null);
 
-  const initAudioCtx = () => {
-    try {
-      const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtxClass) return null;
-      if (!audioCtxRef.current) {
-        audioCtxRef.current = new AudioCtxClass();
-      }
-      if (audioCtxRef.current.state === 'suspended') {
-        audioCtxRef.current.resume();
-      }
-      return audioCtxRef.current;
-    } catch {
-      return null;
+  // Initialize or retrieve Audio instance
+  const getAudio = () => {
+    if (!audioRef.current && typeof window !== 'undefined') {
+      audioRef.current = new Audio();
+      audioRef.current.preload = 'auto';
     }
+    return audioRef.current;
   };
 
-  const playMelodyNote = () => {
-    if (isMuted) return;
-    const ctx = initAudioCtx();
-    if (!ctx) return;
+  const startPlayback = (trackToPlay = currentTrack) => {
+    const audio = getAudio();
+    if (!audio) return;
 
-    const melody = currentTrack.melody || [440, 523, 659, 784];
-    const freq = melody[noteIndexRef.current % melody.length];
-    noteIndexRef.current += 1;
+    if (audio.src !== trackToPlay.audioUrl) {
+      audio.src = trackToPlay.audioUrl;
+      audio.load();
+    }
+    audio.muted = isMuted;
 
-    try {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const filter = ctx.createBiquadFilter();
-
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(1400, ctx.currentTime);
-
-      gain.gain.setValueAtTime(0.045, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.32);
-
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.34);
-    } catch {}
-  };
-
-  const startPlayback = () => {
-    setIsPlaying(true);
-    initAudioCtx();
-
-    // Start melody ticker
-    clearInterval(loopIntervalRef.current);
-    playMelodyNote();
-    loopIntervalRef.current = setInterval(playMelodyNote, 280);
-
-    // Progress ticker
-    clearInterval(progressIntervalRef.current);
-    progressIntervalRef.current = setInterval(() => {
-      setPlayProgress((prev) => (prev >= 100 ? 0 : prev + 0.6));
-    }, 1000);
+    audio
+      .play()
+      .then(() => {
+        setIsPlaying(true);
+      })
+      .catch((err) => {
+        console.warn('Playback error:', err);
+        setIsPlaying(false);
+      });
   };
 
   const stopPlayback = () => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.pause();
+    }
     setIsPlaying(false);
-    clearInterval(loopIntervalRef.current);
-    clearInterval(progressIntervalRef.current);
   };
 
   const togglePlay = () => {
@@ -121,19 +86,62 @@ export default function SpotifyWidget({ playBeep }) {
     const idx = (newIndex + spotifyTracks.length) % spotifyTracks.length;
     setActiveTrackIndex(idx);
     setPlayProgress(0);
-    noteIndexRef.current = 0;
     playBeep?.(700 + idx * 40);
 
-    if (isPlaying) {
-      startPlayback();
+    const nextTrack = spotifyTracks[idx];
+    const audio = getAudio();
+    if (audio) {
+      audio.src = nextTrack.audioUrl;
+      if (isPlaying) {
+        audio
+          .play()
+          .then(() => setIsPlaying(true))
+          .catch(() => setIsPlaying(false));
+      }
     }
   };
 
-  // Cleanup on unmount
+  // Sync mute state
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
+
+  // Audio event listeners for timeupdate & onended
+  useEffect(() => {
+    const audio = getAudio();
+    if (!audio) return;
+
+    if (!audio.src) {
+      audio.src = currentTrack.audioUrl;
+    }
+
+    const handleTimeUpdate = () => {
+      if (audio.duration && !isNaN(audio.duration)) {
+        setPlayProgress((audio.currentTime / audio.duration) * 100);
+      }
+    };
+
+    const handleEnded = () => {
+      handleTrackChange(activeTrackIndex + 1);
+    };
+
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('ended', handleEnded);
+    };
+  }, [activeTrackIndex, currentTrack]);
+
+  // Pause on unmount
   useEffect(() => {
     return () => {
-      clearInterval(loopIntervalRef.current);
-      clearInterval(progressIntervalRef.current);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
     };
   }, []);
 
@@ -201,12 +209,12 @@ export default function SpotifyWidget({ playBeep }) {
               <div className="flex items-center justify-between text-[11px] font-mono text-slate-400">
                 <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
                   <Sparkles className="w-3.5 h-3.5" />
-                  Event Audio Engine
+                  Official Studio Audio
                 </span>
-                <span className="text-slate-500">Live Browser Audio</span>
+                <span className="text-slate-500">Live Vocal & Master</span>
               </div>
               <p className="text-xs text-slate-300 leading-relaxed">
-                Pilih lagu pada tabel di samping untuk langsung mendengarkan melodi tema setiap aktivasi secara instan tanpa jeda.
+                Pilih lagu pada tabel di samping untuk langsung memutar audio resmi studio lengkap dengan vokal asli penyanyi hits dunia.
               </p>
             </div>
           </div>
@@ -379,7 +387,18 @@ export default function SpotifyWidget({ playBeep }) {
               {/* Bottom Sticky Player Bar */}
               <div className="mt-4 pt-3 border-t border-slate-800/90 space-y-2">
                 {/* Progress bar */}
-                <div className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden cursor-pointer">
+                <div
+                  className="w-full h-1.5 rounded-full bg-slate-800 overflow-hidden cursor-pointer"
+                  onClick={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const pct = Math.max(0, Math.min(1, clickX / rect.width));
+                    if (audioRef.current && audioRef.current.duration) {
+                      audioRef.current.currentTime = pct * audioRef.current.duration;
+                      setPlayProgress(pct * 100);
+                    }
+                  }}
+                >
                   <div
                     className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-300"
                     style={{ width: `${playProgress}%` }}
