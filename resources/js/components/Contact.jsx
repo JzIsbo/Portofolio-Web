@@ -55,41 +55,41 @@ export default function Contact({ playBeep }) {
   };
 
   return (
-    <section id="Contact" className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="Contact" className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
       {/* Section Header */}
-      <div className="flex flex-col items-center text-center space-y-3 mb-16">
+      <div className="flex flex-col items-center text-center space-y-2.5 sm:space-y-3 mb-10 sm:mb-16">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/25 text-xs font-mono text-cyan-400">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Mari Terhubung</span>
         </div>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+        <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
           Punya Ide Proyek? <span className="gradient-text">Hubungi Saya</span>
         </h2>
-        <p className="text-slate-400 text-sm sm:text-base max-w-xl">
+        <p className="text-slate-400 text-xs sm:text-base max-w-xl px-2">
           Terbuka untuk kolaborasi aktivasi brand, manajemen event offline berskala nasional, dan kemitraan strategis.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 text-left">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 text-left">
         {/* Left Column: Direct Partnership & Social Cards */}
         <div className="lg:col-span-5 space-y-4">
           {/* Brand Activation Partnership Card */}
-          <div className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 hover:border-sky-500/40 transition-all duration-300 shadow-xl backdrop-blur-xl space-y-4">
+          <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-slate-900/80 border border-slate-800 hover:border-sky-500/40 transition-all duration-300 shadow-xl backdrop-blur-xl space-y-3 sm:space-y-4">
             <div className="flex items-center justify-between">
-              <span className="p-3 rounded-2xl bg-gradient-to-tr from-rose-500/20 to-sky-500/20 text-sky-400 border border-sky-500/30">
-                <Flame className="w-6 h-6 text-rose-400" />
+              <span className="p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-rose-500/20 to-sky-500/20 text-sky-400 border border-sky-500/30">
+                <Flame className="w-5 h-5 sm:w-6 sm:h-6 text-rose-400" />
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-[11px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 Available for Activations
               </span>
             </div>
 
             <div>
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-400">
+              <span className="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-slate-400">
                 Brand & Event Activation
               </span>
-              <h3 className="text-lg font-bold text-white mt-0.5">
+              <h3 className="text-base sm:text-lg font-bold text-white mt-0.5">
                 Kolaborasi & Kemitraan Event
               </h3>
             </div>
@@ -98,22 +98,22 @@ export default function Contact({ playBeep }) {
               Siap merancang strategi aktivasi multi-brand, roadshow mall nasional, experiential consumer engagement, dan koordinasi event berskala besar.
             </p>
 
-            <div className="pt-2 flex flex-wrap gap-1.5 border-t border-slate-800/80 text-[11px] font-mono text-slate-400">
-              <span className="px-2.5 py-1 rounded-md bg-slate-800/80 text-rose-300 border border-rose-500/20">
+            <div className="pt-2 flex flex-wrap gap-1.5 border-t border-slate-800/80 text-[10px] sm:text-[11px] font-mono text-slate-400">
+              <span className="px-2.5 py-0.5 sm:py-1 rounded-md bg-slate-800/80 text-rose-300 border border-rose-500/20">
                 GOC Brands
               </span>
-              <span className="px-2.5 py-1 rounded-md bg-slate-800/80 text-sky-300 border border-sky-500/20">
+              <span className="px-2.5 py-0.5 sm:py-1 rounded-md bg-slate-800/80 text-sky-300 border border-sky-500/20">
                 Ex Kanzler
               </span>
-              <span className="px-2.5 py-1 rounded-md bg-slate-800/80 text-pink-300 border border-pink-500/20">
+              <span className="px-2.5 py-0.5 sm:py-1 rounded-md bg-slate-800/80 text-pink-300 border border-pink-500/20">
                 Dear Me Beauty
               </span>
             </div>
           </div>
 
           {/* Social Channels List (LinkedIn & Instagram) */}
-          <div className="p-6 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-xl backdrop-blur-xl space-y-3">
-            <span className="text-xs font-mono uppercase tracking-wider text-slate-400 block mb-1">
+          <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-slate-900/80 border border-slate-800 shadow-xl backdrop-blur-xl space-y-2.5 sm:space-y-3">
+            <span className="text-[11px] sm:text-xs font-mono uppercase tracking-wider text-slate-400 block mb-1">
               Social Media & Profil
             </span>
 
@@ -169,21 +169,21 @@ export default function Contact({ playBeep }) {
 
         {/* Right Column: Interactive Contact Form */}
         <div className="lg:col-span-7">
-          <div className="p-6 sm:p-8 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-2xl backdrop-blur-xl">
-            <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-sky-400" />
+          <div className="p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-slate-900/80 border border-slate-800 shadow-2xl backdrop-blur-xl">
+            <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 flex items-center gap-2">
+              <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-sky-400" />
               <span>Kirim Pesan Langsung</span>
             </h3>
-            <p className="text-xs sm:text-sm text-slate-400 mb-6">
+            <p className="text-xs sm:text-sm text-slate-400 mb-4 sm:mb-6">
               Isi data di bawah ini, saya akan merespon pesan Anda secepatnya.
             </p>
 
             {submitted ? (
-              <div className="p-8 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center space-y-3 animate-in fade-in zoom-in-95 duration-200">
-                <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="w-6 h-6" />
+              <div className="p-6 sm:p-8 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center space-y-3 animate-in fade-in zoom-in-95 duration-200">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                  <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <h4 className="text-lg font-bold text-white">
+                <h4 className="text-base sm:text-lg font-bold text-white">
                   Pesan Berhasil Terkirim!
                 </h4>
                 <p className="text-xs sm:text-sm text-slate-300">
@@ -191,10 +191,10 @@ export default function Contact({ playBeep }) {
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <label className="block text-xs font-mono text-slate-400 mb-1.5">
+                    <label className="block text-[11px] sm:text-xs font-mono text-slate-400 mb-1">
                       Nama Anda
                     </label>
                     <input
@@ -203,12 +203,12 @@ export default function Contact({ playBeep }) {
                       placeholder="Masukkan nama..."
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-slate-800 text-base sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
+                      className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-slate-950/80 border border-slate-800 text-base sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono text-slate-400 mb-1.5">
+                    <label className="block text-[11px] sm:text-xs font-mono text-slate-400 mb-1">
                       Email Anda
                     </label>
                     <input
@@ -217,13 +217,13 @@ export default function Contact({ playBeep }) {
                       placeholder="contoh@domain.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-slate-800 text-base sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
+                      className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-slate-950/80 border border-slate-800 text-base sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-mono text-slate-400 mb-1.5">
+                  <label className="block text-[11px] sm:text-xs font-mono text-slate-400 mb-1">
                     Pesan / Deskripsi Proyek
                   </label>
                   <textarea
@@ -232,13 +232,13 @@ export default function Contact({ playBeep }) {
                     placeholder="Ceritakan tentang ide atau kebutuhan proyek Anda..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-950/80 border border-slate-800 text-base sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all resize-none"
+                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-slate-950/80 border border-slate-800 text-base sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:brightness-110 active:scale-95 text-white shadow-lg shadow-sky-500/20 transition-all duration-200"
+                  className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 sm:py-3.5 rounded-xl text-xs sm:text-sm font-semibold bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:brightness-110 active:scale-95 text-white shadow-lg shadow-sky-500/20 transition-all duration-200"
                 >
                   <Send className="w-4 h-4" />
                   <span>Kirim Pesan</span>

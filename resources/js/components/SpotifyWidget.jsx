@@ -15,35 +15,35 @@ export default function SpotifyWidget({ playBeep }) {
   const [activeTrackIndex, setActiveTrackIndex] = useState(0);
 
   return (
-    <section id="Spotify" className="relative py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="Spotify" className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
       {/* Background ambient neon glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[500px] h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Main Spotify Card Container */}
-      <div className="relative rounded-3xl bg-gradient-to-br from-slate-900/90 via-[#07131e]/90 to-slate-950/95 border border-sky-500/25 p-5 sm:p-10 lg:p-12 shadow-2xl backdrop-blur-xl overflow-hidden text-left">
+      <div className="relative rounded-2xl sm:rounded-3xl bg-gradient-to-br from-slate-900/90 via-[#07131e]/90 to-slate-950/95 border border-sky-500/25 p-4 sm:p-8 lg:p-12 shadow-2xl backdrop-blur-xl overflow-hidden text-left">
         {/* Subtle decorative concentric circles */}
         <div className="absolute -top-24 -left-24 w-80 h-80 rounded-full border border-sky-500/10 pointer-events-none" />
         <div className="absolute -bottom-24 -right-24 w-80 h-80 rounded-full border border-emerald-500/10 pointer-events-none" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center">
           {/* Left Column: Heading, Subtitle & Interactive Equalizer */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-5 space-y-4 sm:space-y-6">
             {/* Eyebrow with Animated Equalizer Bars */}
-            <div className="inline-flex items-center gap-3">
-              <div className="flex items-end gap-1 h-4">
-                <span className="w-1 bg-emerald-400 rounded-full animate-[pulse_1s_ease-in-out_infinite] h-3" />
-                <span className="w-1 bg-rose-400 rounded-full animate-[pulse_0.7s_ease-in-out_infinite] h-4" />
+            <div className="inline-flex items-center gap-2.5">
+              <div className="flex items-end gap-1 h-3.5">
+                <span className="w-1 bg-emerald-400 rounded-full animate-[pulse_1s_ease-in-out_infinite] h-2.5" />
+                <span className="w-1 bg-rose-400 rounded-full animate-[pulse_0.7s_ease-in-out_infinite] h-3.5" />
                 <span className="w-1 bg-amber-400 rounded-full animate-[pulse_1.2s_ease-in-out_infinite] h-2" />
-                <span className="w-1 bg-emerald-400 rounded-full animate-[pulse_0.9s_ease-in-out_infinite] h-3.5" />
+                <span className="w-1 bg-emerald-400 rounded-full animate-[pulse_0.9s_ease-in-out_infinite] h-3" />
               </div>
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-emerald-400">
-                Spotify Event & Activation Vibes
+              <span className="text-[11px] sm:text-xs font-mono font-bold uppercase tracking-widest text-emerald-400">
+                Spotify Event Vibes
               </span>
             </div>
 
             {/* Title */}
             <div>
-              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">
+              <h2 className="text-xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
                 Soundtrack of Events. <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-rose-400 to-amber-300">
                   Powering Great Activations.
@@ -52,28 +52,28 @@ export default function SpotifyWidget({ playBeep }) {
             </div>
 
             {/* Description */}
-            <p className="text-slate-300 text-xs sm:text-base leading-relaxed">
+            <p className="text-slate-300 text-xs sm:text-sm md:text-base leading-relaxed">
               Kompilasi lagu penuh energi yang menemani perancangan strategi aktivasi brand, koordinasi panggung event akbar, hingga ritme dinamis dari latar belakang Concert Band & Musik di Universitas Bunda Mulia.
             </p>
 
             {/* Open in Spotify CTA */}
-            <div className="pt-2">
+            <div className="pt-1 sm:pt-2">
               <a
                 href={personalInfo.socials.spotify}
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => playBeep?.(850)}
-                className="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full text-xs sm:text-sm font-semibold bg-[#1ed760] hover:bg-[#1fdf64] text-slate-950 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/35 active:scale-95 transition-all duration-200 w-full sm:w-auto text-center"
+                className="inline-flex items-center justify-center gap-2.5 px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-full text-xs sm:text-sm font-semibold bg-[#1ed760] hover:bg-[#1fdf64] text-slate-950 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/35 active:scale-95 transition-all duration-200 w-full sm:w-auto text-center"
               >
-                <SpotifyLogo className="w-5 h-5 text-slate-950" />
+                <SpotifyLogo className="w-4 h-4 sm:w-5 sm:h-5 text-slate-950" />
                 <span>Buka Playlist di Spotify</span>
-                <ExternalLink className="w-4 h-4" />
+                <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </a>
             </div>
 
             {/* Mini Tracks Quick Switch */}
-            <div className="space-y-2 pt-2">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
+            <div className="space-y-1.5 sm:space-y-2 pt-1 sm:pt-2">
+              <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-slate-400">
                 Featured Vibes
               </span>
               <div className="space-y-1.5">
@@ -84,19 +84,19 @@ export default function SpotifyWidget({ playBeep }) {
                       setActiveTrackIndex(idx);
                       playBeep?.(700 + idx * 50);
                     }}
-                    className={`flex items-center justify-between p-2.5 rounded-xl border text-xs cursor-pointer transition-all ${
+                    className={`flex items-center justify-between p-2 sm:p-2.5 rounded-xl border text-xs cursor-pointer transition-all ${
                       activeTrackIndex === idx
                         ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-300'
                         : 'bg-slate-900/60 border-slate-800/80 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5 truncate">
-                      <Play className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
-                      <span className="font-medium text-slate-200 truncate">
+                    <div className="flex items-center gap-2 truncate min-w-0 pr-2">
+                      <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0 text-emerald-400" />
+                      <span className="font-medium text-slate-200 truncate text-[11px] sm:text-xs">
                         {track.title}
                       </span>
-                      <span className="text-slate-500">•</span>
-                      <span className="text-slate-400 truncate text-[11px]">
+                      <span className="text-slate-600 shrink-0">•</span>
+                      <span className="text-slate-400 truncate text-[10px] sm:text-[11px]">
                         {track.artist}
                       </span>
                     </div>
@@ -116,14 +116,14 @@ export default function SpotifyWidget({ playBeep }) {
                 title="Spotify Event & Activation Playlist"
                 src={personalInfo.spotifyEmbed}
                 width="100%"
-                height="380"
+                height="320"
                 frameBorder="0"
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                 loading="lazy"
-                className="w-full rounded-2xl bg-slate-950"
+                className="w-full h-[280px] sm:h-[340px] rounded-2xl bg-slate-950"
               />
             </div>
-            <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-3 px-1">
+            <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-400 pt-2.5 px-1">
               <span>Spotify Web Embed Player</span>
               <span className="flex items-center gap-1.5 text-emerald-400">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />

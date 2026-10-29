@@ -26,22 +26,23 @@ export default function Lanyard({
     const container = containerRef.current;
     if (!container) return;
 
-    let width = container.clientWidth || 450;
-    let height = container.clientHeight || 550;
+    let width = container.clientWidth || 340;
+    let height = container.clientHeight || 420;
+    const isMobile = (window.innerWidth || width) < 640;
 
     // --- Three.js Scene Setup ---
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    camera.position.set(0, 0, 7.5);
+    camera.position.set(0, 0, width < 480 ? 8.4 : 7.5);
 
     let renderer;
     try {
       renderer = new THREE.WebGLRenderer({
-        antialias: true,
+        antialias: !isMobile, // Disable MSAA on mobile for buttery smooth 60fps
         alpha: true,
-        powerPreference: 'high-performance',
+        powerPreference: isMobile ? 'default' : 'high-performance',
       });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
       renderer.setSize(width, height);
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.1;
@@ -385,6 +386,12 @@ export default function Lanyard({
         dragging = true;
         setIsDragging(true);
         container.style.cursor = 'grabbing';
+        container.style.touchAction = 'none';
+        try {
+          if (e.pointerId !== undefined && container.setPointerCapture) {
+            container.setPointerCapture(e.pointerId);
+          }
+        } catch {}
         raycaster.ray.intersectPlane(dragPlane, intersectionPoint);
         dragOffset.copy(cardPos).sub(intersectionPoint);
       }
@@ -408,7 +415,7 @@ export default function Lanyard({
           cardVel.copy(targetPos).sub(cardPos).multiplyScalar(0.7);
           cardPos.copy(targetPos);
         }
-      } else {
+      } else if (!isMobile) {
         raycaster.setFromCamera(mouse, camera);
         const intersects = raycaster.intersectObject(cardMesh);
         const hovered = intersects.length > 0;
@@ -422,36 +429,37 @@ export default function Lanyard({
         dragging = false;
         setIsDragging(false);
         container.style.cursor = isHovered ? 'grab' : 'default';
+        container.style.touchAction = 'pan-y';
+        try {
+          if (e.pointerId !== undefined && container.releasePointerCapture) {
+            container.releasePointerCapture(e.pointerId);
+          }
+        } catch {}
 
         const { rawX, rawY } = getNDCCoords(e);
         const dist = Math.hypot(rawX - downPointerPos.x, rawY - downPointerPos.y);
         const elapsed = performance.now() - downPointerPos.time;
 
         // If it was a quick tap/click without moving much, flip card!
-        if (dist < 8 && elapsed < 400) {
+        if (dist < 12 && elapsed < 450) {
           targetFlipAngle += Math.PI;
           setIsFlipped((f) => !f);
         }
       }
     };
 
-    const onTouchStart = (e) => {
-      if (e.touches.length === 1) {
-        onPointerDown(e);
-      }
-    };
-
     container.addEventListener('pointerdown', onPointerDown);
     window.addEventListener('pointermove', onPointerMove);
     window.addEventListener('pointerup', onPointerUp);
-    container.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('pointercancel', onPointerUp);
 
     // --- Resize Handler ---
     const handleResize = () => {
       if (!container) return;
-      width = container.clientWidth || 400;
-      height = container.clientHeight || 500;
+      width = container.clientWidth || 320;
+      height = container.clientHeight || 360;
       camera.aspect = width / height;
+      camera.position.z = width < 480 ? 8.4 : 7.5;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
     };
@@ -460,6 +468,7 @@ export default function Lanyard({
     // --- Animation Loop ---
     let animationFrameId;
     let clock = new THREE.Clock();
+    let frameCounter = 0;
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
@@ -530,7 +539,7 @@ export default function Lanyard({
 
       // Constraint relaxation passes
       const segmentLen = (anchorY - topClipPos.y) / NUM_SEGMENTS;
-      for (let pass = 0; pass < 6; pass++) {
+      for (let pass = 0; pass < (isMobile ? 3 : 5); pass++) {
         for (let i = 0; i < NUM_SEGMENTS; i++) {
           const p1 = ropePoints[i];
           const p2 = ropePoints[i + 1];
@@ -545,11 +554,13 @@ export default function Lanyard({
         }
       }
 
-      // Update strap tube geometry along curve
-      if (strapMesh) {
+      // Update strap tube geometry intelligently to save GPU & garbage collection
+      frameCounter++;
+      const isMoving = dragging || cardVel.lengthSq() > 0.0002;
+      if (strapMesh && (isMoving || frameCounter % 4 === 0)) {
         const curve = new THREE.CatmullRomCurve3(ropePoints);
         strapMesh.geometry.dispose();
-        strapMesh.geometry = new THREE.TubeGeometry(curve, 32, 0.06, 8, false);
+        strapMesh.geometry = new THREE.TubeGeometry(curve, isMobile ? 18 : 28, 0.06, isMobile ? 5 : 8, false);
       }
 
       renderer.render(scene, camera);
@@ -564,7 +575,7 @@ export default function Lanyard({
       container.removeEventListener('pointerdown', onPointerDown);
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerup', onPointerUp);
-      container.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('pointercancel', onPointerUp);
 
       if (renderer.domElement && container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
@@ -574,24 +585,25 @@ export default function Lanyard({
   }, [frontImage, backImage, strapImage]);
 
   return (
-    <div className={`relative w-full h-[400px] sm:h-[500px] md:h-[620px] flex items-center justify-center select-none ${className}`}>
+    <div className={`relative w-full h-[320px] sm:h-[440px] md:h-[560px] flex items-center justify-center select-none overflow-hidden ${className}`}>
       {/* 3D Canvas Mount */}
       <div
         ref={containerRef}
-        className="w-full h-full cursor-grab active:cursor-grabbing touch-none flex items-center justify-center"
+        style={{ touchAction: 'pan-y' }}
+        className="w-full h-full cursor-grab active:cursor-grabbing flex items-center justify-center"
         aria-label="Interactive 3D Lanyard ID Badge"
       />
 
       {/* Interactive Helper Hint Badge */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 backdrop-blur-md border border-sky-500/25 text-[11px] sm:text-xs text-slate-300 shadow-lg pointer-events-none transition-opacity duration-300 max-w-[92%] truncate">
+      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 backdrop-blur-md border border-sky-500/25 text-[10px] sm:text-xs text-slate-300 shadow-lg pointer-events-none transition-opacity duration-300 max-w-[90%] truncate">
         <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping shrink-0" />
-        <span className="truncate">Tarik / Drag & Klik untuk Membalik ID Card</span>
+        <span className="truncate">Tarik & Sentuh / Klik untuk Membalik ID Card</span>
       </div>
 
       {/* Active state indicator */}
       {isDragging && (
-        <div className="absolute top-4 right-4 text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-          Dragging Physics Active
+        <div className="absolute top-3 right-3 text-[9px] uppercase font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+          Interacting
         </div>
       )}
     </div>

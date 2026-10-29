@@ -16,6 +16,17 @@ export default function Navbar({ soundEnabled, toggleSound, playBeep }) {
   ];
 
   useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 30);
 
@@ -40,9 +51,9 @@ export default function Navbar({ soundEnabled, toggleSound, playBeep }) {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-4 sm:pt-6 transition-all duration-300 pointer-events-none">
+    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-2.5 sm:px-4 pt-3 sm:pt-6 transition-all duration-300 pointer-events-none">
       <nav
-        className={`pointer-events-auto flex items-center justify-between gap-4 px-4 sm:px-6 py-2.5 rounded-full border transition-all duration-300 backdrop-blur-xl shadow-2xl ${
+        className={`pointer-events-auto flex items-center justify-between gap-2 sm:gap-4 px-3 sm:px-6 py-2 sm:py-2.5 rounded-full border transition-all duration-300 backdrop-blur-xl shadow-2xl ${
           scrolled
             ? 'bg-slate-950/85 border-slate-700/60 shadow-sky-950/30'
             : 'bg-slate-900/60 border-slate-800/80'
@@ -51,22 +62,22 @@ export default function Navbar({ soundEnabled, toggleSound, playBeep }) {
         {/* Brand */}
         <a
           href="#Home"
-          className="flex items-center gap-2.5 group"
+          className="flex items-center gap-2 sm:gap-2.5 group"
           onClick={() => playBeep?.(520)}
         >
-          <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-sky-400/50 shadow-md shadow-sky-500/25 group-hover:scale-105 group-hover:border-sky-300 transition-all shrink-0">
+          <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden border-2 border-sky-400/50 shadow-md shadow-sky-500/25 group-hover:scale-105 group-hover:border-sky-300 transition-all shrink-0">
             <img
               src="/assets/steve.png"
               alt={personalInfo.name}
               className="w-full h-full object-cover object-top"
             />
-            <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-cyan-400 ring-2 ring-slate-950 animate-pulse" />
+            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-cyan-400 ring-2 ring-slate-950 animate-pulse" />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold tracking-wide text-white group-hover:text-cyan-400 transition-colors">
+            <span className="text-xs sm:text-sm font-semibold tracking-wide text-white group-hover:text-cyan-400 transition-colors">
               {personalInfo.name}
             </span>
-            <span className="text-[10px] text-rose-400 -mt-0.5 font-mono font-medium">
+            <span className="text-[9px] sm:text-[10px] text-rose-400 -mt-0.5 font-mono font-medium">
               Brand Activation
             </span>
           </div>
@@ -149,7 +160,7 @@ export default function Navbar({ soundEnabled, toggleSound, playBeep }) {
           />
 
           {/* Floating Luxury Sheet */}
-          <div className="md:hidden pointer-events-auto fixed inset-x-4 top-20 z-50 p-5 rounded-3xl bg-slate-950/95 backdrop-blur-2xl border border-sky-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col gap-4 animate-in fade-in slide-in-from-top-4 duration-200">
+          <div className="md:hidden pointer-events-auto fixed inset-x-3 sm:inset-x-4 top-16 sm:top-20 z-50 p-4 sm:p-5 max-h-[85vh] overflow-y-auto overscroll-contain rounded-2xl sm:rounded-3xl bg-slate-950/95 backdrop-blur-2xl border border-sky-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)] flex flex-col gap-3.5 sm:gap-4 animate-in fade-in slide-in-from-top-4 duration-200">
             {/* Header info inside drawer */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
               <div className="flex items-center gap-2.5">
@@ -176,7 +187,7 @@ export default function Navbar({ soundEnabled, toggleSound, playBeep }) {
             </div>
 
             {/* Nav Links */}
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-1 sm:gap-1.5">
               {navLinks.map((link) => {
                 const isActive = activeSection === link.name;
                 return (
@@ -187,7 +198,7 @@ export default function Navbar({ soundEnabled, toggleSound, playBeep }) {
                       setMobileMenuOpen(false);
                       playBeep?.(600);
                     }}
-                    className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
+                    className={`flex items-center justify-between px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-semibold transition-all ${
                       isActive
                         ? 'bg-gradient-to-r from-sky-500/20 to-indigo-500/20 border border-sky-400/40 text-white shadow-sm'
                         : 'text-slate-300 hover:text-white hover:bg-slate-900 border border-transparent'
@@ -201,26 +212,26 @@ export default function Navbar({ soundEnabled, toggleSound, playBeep }) {
             </div>
 
             {/* Mobile Actions: CTA & Socials */}
-            <div className="pt-3 border-t border-slate-800/80 flex flex-col gap-2.5">
+            <div className="pt-2.5 sm:pt-3 border-t border-slate-800/80 flex flex-col gap-2 sm:gap-2.5">
               <a
                 href="#Contact"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   playBeep?.(800);
                 }}
-                className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-xs font-semibold bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-600 text-white shadow-md shadow-sky-500/25 active:scale-95 transition-all text-center"
+                className="w-full inline-flex items-center justify-center gap-2 py-2.5 sm:py-3 px-4 rounded-xl text-xs font-semibold bg-gradient-to-r from-sky-500 via-indigo-500 to-purple-600 text-white shadow-md shadow-sky-500/25 active:scale-95 transition-all text-center"
               >
                 <span>Hubungi Steve Marvin</span>
                 <ArrowUpRight className="w-4 h-4" />
               </a>
 
-              <div className="flex items-center justify-center gap-3 pt-1">
+              <div className="flex items-center justify-center gap-2.5 sm:gap-3 pt-0.5 sm:pt-1">
                 {personalInfo.socials.linkedin && (
                   <a
                     href={personalInfo.socials.linkedin}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-400 text-xs font-mono"
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-900 border border-sky-500/30 text-sky-400 text-xs font-mono"
                   >
                     <span>LinkedIn</span>
                   </a>
@@ -230,7 +241,7 @@ export default function Navbar({ soundEnabled, toggleSound, playBeep }) {
                     href={personalInfo.socials.instagram}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 inline-flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-slate-900 border border-pink-500/30 text-pink-400 text-xs font-mono"
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-900 border border-pink-500/30 text-pink-400 text-xs font-mono"
                   >
                     <span>Instagram</span>
                   </a>

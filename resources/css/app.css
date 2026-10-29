@@ -15,6 +15,14 @@
     background-color: #050510;
     color: #e2e8f0;
     font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -120,10 +128,10 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  min-height: 380px;
-  height: 420px;
+  min-height: 310px;
+  height: 360px;
   width: 100%;
-  max-width: 350px;
+  max-width: min(310px, 86vw);
   margin: 0 auto;
   cursor: crosshair;
 }

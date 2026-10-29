@@ -11,15 +11,16 @@ export default function BackgroundCanvas() {
 
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
+    const isMobile = width < 640;
 
-    // Generate random stars
-    const numStars = Math.min(Math.floor((width * height) / 10000), 120);
+    // Generate random stars (optimized count on mobile for high FPS & battery efficiency)
+    const numStars = Math.min(Math.floor((width * height) / 14000), isMobile ? 35 : 85);
     const stars = Array.from({ length: numStars }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: Math.random() * 1.5 + 0.5,
+      size: Math.random() * 1.4 + 0.6,
       alpha: Math.random() * 0.7 + 0.2,
-      speed: Math.random() * 0.015 + 0.005,
+      speed: Math.random() * 0.012 + 0.005,
       color: Math.random() > 0.4 ? '#38bdf8' : '#a855f7',
     }));
 
