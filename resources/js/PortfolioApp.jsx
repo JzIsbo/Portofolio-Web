@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import gsap from 'gsap';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -14,7 +13,12 @@ import Preloader from './components/Preloader';
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(false);
+  const soundEnabledRef = useRef(soundEnabled);
   const mainRef = useRef(null);
+
+  useEffect(() => {
+    soundEnabledRef.current = soundEnabled;
+  }, [soundEnabled]);
 
   // Persistent Web Audio API Synthesizer
   const audioCtxRef = useRef(null);
@@ -77,8 +81,8 @@ export default function App() {
     }
   };
 
-  const playBeep = (freq = 600, type = 'sine', vol = 0.035) => {
-    if (!soundEnabled) return;
+  const playBeep = React.useCallback((freq = 600, type = 'sine', vol = 0.035) => {
+    if (!soundEnabledRef.current) return;
     try {
       const ctx = getAudioContext();
       if (!ctx) return;
@@ -95,26 +99,12 @@ export default function App() {
     } catch (e) {
       // AudioContext blocked or not supported
     }
-  };
+  }, []);
 
-  // GSAP Initial Page Entrance Animation once Loading completes
-  useEffect(() => {
-    if (!loading) {
-      const ctx = gsap.context(() => {
-        gsap.from('#Home', {
-          opacity: 0,
-          y: 35,
-          duration: 1.1,
-          ease: 'power3.out',
-        });
-      }, mainRef);
-
-      return () => ctx.revert();
-    }
-  }, [loading]);
+  // Preloader curtain sweep provides a clean theatrical reveal without jarring post-load opacity jumps
 
   return (
-    <div ref={mainRef} className="relative min-h-screen bg-[#050510] text-[#e2e8f0] overflow-x-hidden selection:bg-sky-500/30 selection:text-white">
+    <div ref={mainRef} className="relative min-h-screen bg-[#050510] text-[#e2e8f0] overflow-x-clip selection:bg-sky-500/30 selection:text-white">
       {/* Cool & Elegant Preloader on initial entry */}
       {loading && (
         <Preloader
@@ -134,7 +124,7 @@ export default function App() {
       />
 
       {/* Main Content Sections */}
-      <main className="relative z-10 flex flex-col space-y-8 sm:space-y-24 w-full max-w-full min-w-0 overflow-x-hidden">
+      <main className="relative z-10 flex flex-col space-y-8 sm:space-y-24 w-full max-w-full min-w-0 overflow-x-clip">
         {/* 1. Hero with Typewriter & 3D Interactive Lanyard */}
         <Hero playBeep={playBeep} />
 

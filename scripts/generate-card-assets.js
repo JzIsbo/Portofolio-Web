@@ -9,126 +9,132 @@ const rootDir = path.resolve(__dirname, '..');
 const assetsDir = path.join(rootDir, 'public', 'assets');
 const distAssetsDir = path.join(rootDir, 'dist', 'assets');
 
+// Helper to draw rounded rectangle with cross-platform fallback
+function drawRoundRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  if (typeof ctx.roundRect === 'function') {
+    ctx.roundRect(x, y, width, height, radius);
+  } else {
+    const r = Math.min(radius, width / 2, height / 2);
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + width - r, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+    ctx.lineTo(x + width, y + height - r);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+    ctx.lineTo(x + r, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+}
+
 async function generateAssets() {
-  console.log('Generating authentic alfari.my.id-style editorial ID card for Steve Marvin...');
+  console.log('Generating official VIP PASS card model & exact alfari-style Steve Marvin lanyard strap...');
 
   // =========================================================================
-  // 1. FRONT CARD (1024 x 1440) - EDITORIAL BRUTALIST VINTAGE CREAM PASS
+  // 1. FRONT CARD (1600 x 2400) - OFFICIAL VIP PASS (SPACIOUS, NO BARCODE)
   // =========================================================================
-  const frontCvs = createCanvas(1024, 1440);
+  const W = 1600;
+  const H = 2400;
+  const frontCvs = createCanvas(W, H);
   const fCtx = frontCvs.getContext('2d');
 
-  // Base vintage cream / off-white paper texture
-  fCtx.fillStyle = '#ece7de';
-  fCtx.fillRect(0, 0, 1024, 1440);
+  // Deep dark cyber-cosmic gradient background
+  const bgGrad = fCtx.createLinearGradient(0, 0, W, H);
+  bgGrad.addColorStop(0, '#0a0d18');
+  bgGrad.addColorStop(0.3, '#170f2b');
+  bgGrad.addColorStop(0.65, '#120b22');
+  bgGrad.addColorStop(1, '#070811');
+  fCtx.fillStyle = bgGrad;
+  fCtx.fillRect(0, 0, W, H);
 
-  // Subtle paper grain / micro-noise
-  fCtx.fillStyle = 'rgba(0, 0, 0, 0.025)';
-  for (let x = 0; x < 1024; x += 6) {
-    for (let y = 0; y < 1440; y += 6) {
-      if ((x * 7 + y * 13) % 17 === 0) {
-        fCtx.fillRect(x, y, 2.5, 2.5);
-      }
-    }
+  // Background tech grid
+  fCtx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+  fCtx.lineWidth = 2;
+  for (let x = 60; x < W; x += 64) {
+    fCtx.beginPath();
+    fCtx.moveTo(x, 60);
+    fCtx.lineTo(x, H - 60);
+    fCtx.stroke();
+  }
+  for (let y = 60; y < H; y += 64) {
+    fCtx.beginPath();
+    fCtx.moveTo(60, y);
+    fCtx.lineTo(W - 60, y);
+    fCtx.stroke();
   }
 
-  // Outer border lines
-  fCtx.strokeStyle = '#18181b';
-  fCtx.lineWidth = 4;
-  fCtx.strokeRect(36, 36, 952, 1368);
+  // Iridescent holographic security strip on left margin
+  const holoGrad = fCtx.createLinearGradient(48, 0, 116, H);
+  holoGrad.addColorStop(0, '#f43f5e');
+  holoGrad.addColorStop(0.2, '#c084fc');
+  holoGrad.addColorStop(0.4, '#38bdf8');
+  holoGrad.addColorStop(0.6, '#34d399');
+  holoGrad.addColorStop(0.8, '#fbbf24');
+  holoGrad.addColorStop(1, '#f43f5e');
+  fCtx.fillStyle = holoGrad;
+  fCtx.fillRect(48, 48, 68, H - 96);
 
-  fCtx.strokeStyle = '#27272a';
-  fCtx.lineWidth = 1.5;
-  fCtx.strokeRect(48, 48, 928, 1344);
-
-  // --- Top Header Section ---
-  // Left: Dark pill badge "SUPERVISOR"
-  fCtx.fillStyle = '#18181b';
-  fCtx.beginPath();
-  if (fCtx.roundRect) fCtx.roundRect(64, 68, 220, 52, 10);
-  else fCtx.rect(64, 68, 220, 52);
-  fCtx.fill();
-
-  fCtx.fillStyle = '#ffffff';
-  fCtx.font = '900 24px sans-serif';
-  fCtx.textAlign = 'center';
-  fCtx.textBaseline = 'middle';
-  fCtx.fillText('SUPERVISOR', 174, 94);
-
-  // Right: Emblem & Company Name
-  // GOC emblem (gold & blue shield)
-  const embX = 740;
-  const embY = 94;
-  fCtx.fillStyle = '#0284c7';
-  fCtx.beginPath();
-  fCtx.arc(embX, embY, 24, 0, Math.PI * 2);
-  fCtx.fill();
-  fCtx.strokeStyle = '#f59e0b';
+  fCtx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
   fCtx.lineWidth = 3;
+  for (let i = 0; i < H; i += 32) {
+    fCtx.beginPath();
+    fCtx.moveTo(48, i);
+    fCtx.lineTo(116, i + 48);
+    fCtx.stroke();
+  }
+
+  // Outer Neon Rose Border
+  fCtx.strokeStyle = '#f43f5e';
+  fCtx.lineWidth = 22;
+  drawRoundRect(fCtx, 36, 36, W - 72, H - 72, 48);
   fCtx.stroke();
+
+  // Inner bright bevel accent stroke
+  fCtx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+  fCtx.lineWidth = 4;
+  drawRoundRect(fCtx, 60, 60, W - 120, H - 120, 36);
+  fCtx.stroke();
+
+  // Top VIP Header Pill
+  fCtx.fillStyle = 'rgba(244, 63, 94, 0.35)';
+  fCtx.strokeStyle = '#f43f5e';
+  fCtx.lineWidth = 5;
+  drawRoundRect(fCtx, 160, 95, W - 320, 110, 55);
+  fCtx.fill();
+  fCtx.stroke();
+
   fCtx.fillStyle = '#ffffff';
-  fCtx.font = '900 20px sans-serif';
-  fCtx.fillText('GOC', embX, embY);
-
-  fCtx.textAlign = 'left';
-  fCtx.fillStyle = '#18181b';
-  fCtx.font = '900 20px sans-serif';
-  fCtx.fillText('PT GLORIA ORIGITA', 775, 84);
-  fCtx.font = '700 16px sans-serif';
-  fCtx.fillStyle = '#52525b';
-  fCtx.fillText('COSMETICS • ID', 775, 106);
-
-  // --- Giant Headline: BRAND ACTIVATION ---
+  fCtx.font = '900 46px sans-serif';
   fCtx.textAlign = 'center';
-  fCtx.fillStyle = '#18181b';
-  fCtx.font = '900 102px "Impact", "Arial Black", sans-serif';
-  fCtx.letterSpacing = '4px';
-  fCtx.fillText('BRAND ACTIVATION', 512, 235);
+  fCtx.fillText('★ OFFICIAL VIP PASS | BRAND ACTIVATION ★', W / 2, 168);
 
-  // Diagonal hatch texture across part of the text (industrial brutalist style)
-  fCtx.strokeStyle = 'rgba(236, 231, 222, 0.7)';
-  fCtx.lineWidth = 3;
-  for (let d = 260; d < 460; d += 8) {
-    fCtx.beginPath();
-    fCtx.moveTo(d, 160);
-    fCtx.lineTo(d + 40, 245);
-    fCtx.stroke();
-  }
+  // Steve Marvin Portrait Photo Section
+  const photoY = 640;
+  const photoRadius = 300;
 
-  // --- Center Portrait Section ---
-  const portX = 80;
-  const portY = 270;
-  const portW = 590;
-  const portH = 750;
+  // Outer pulsing glow rings
+  fCtx.strokeStyle = 'rgba(244, 63, 94, 0.35)';
+  fCtx.lineWidth = 22;
+  fCtx.beginPath();
+  fCtx.arc(W / 2, photoY, photoRadius + 22, 0, Math.PI * 2);
+  fCtx.stroke();
 
-  // Navy deep blue background inside photo box
-  const photoBgGrad = fCtx.createLinearGradient(portX, portY, portX, portY + portH);
-  photoBgGrad.addColorStop(0, '#0f2744');
-  photoBgGrad.addColorStop(0.5, '#1e3a5f');
-  photoBgGrad.addColorStop(1, '#0a1626');
-  fCtx.fillStyle = photoBgGrad;
-  fCtx.fillRect(portX, portY, portW, portH);
+  fCtx.strokeStyle = '#f43f5e';
+  fCtx.lineWidth = 12;
+  fCtx.beginPath();
+  fCtx.arc(W / 2, photoY, photoRadius + 6, 0, Math.PI * 2);
+  fCtx.stroke();
 
-  // Wavy sea/texture overlay
-  fCtx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
-  fCtx.lineWidth = 3;
-  for (let y = portY + 20; y < portY + portH; y += 32) {
-    fCtx.beginPath();
-    for (let x = portX; x < portX + portW; x += 15) {
-      const cy = y + Math.sin((x - portX) * 0.04) * 8;
-      if (x === portX) fCtx.moveTo(x, cy);
-      else fCtx.lineTo(x, cy);
-    }
-    fCtx.stroke();
-  }
-
-  // Draw Steve Marvin's portrait
+  // Load Steve's actual portrait photo
   let photoImg = null;
   for (const imgName of ['steve_hd.png', 'steve.png', 'me.png']) {
     const p = path.join(assetsDir, imgName);
     if (fs.existsSync(p)) {
       try {
         photoImg = await loadImage(p);
+        console.log('Loading Steve photo from:', p);
         break;
       } catch (e) {}
     }
@@ -137,132 +143,90 @@ async function generateAssets() {
   if (photoImg) {
     fCtx.save();
     fCtx.beginPath();
-    fCtx.rect(portX, portY, portW, portH);
+    fCtx.arc(W / 2, photoY, photoRadius, 0, Math.PI * 2);
     fCtx.clip();
-    const sc = Math.max(portW / photoImg.width, portH / photoImg.height) * 1.05;
+    const sc = Math.max((photoRadius * 2) / photoImg.width, (photoRadius * 2) / photoImg.height);
     const pw = photoImg.width * sc;
     const ph = photoImg.height * sc;
-    fCtx.drawImage(photoImg, portX + (portW - pw) / 2, portY + portH - ph, pw, ph);
+    fCtx.drawImage(photoImg, W / 2 - pw / 2, photoY - ph / 2, pw, ph);
     fCtx.restore();
   }
 
-  // Border around photo box
-  fCtx.strokeStyle = '#18181b';
-  fCtx.lineWidth = 4;
-  fCtx.strokeRect(portX, portY, portW, portH);
-
-  // White nameplate box directly under the photo
-  fCtx.fillStyle = '#ffffff';
-  fCtx.fillRect(portX + 20, portY + portH - 72, portW - 40, 56);
-  fCtx.strokeStyle = '#18181b';
-  fCtx.lineWidth = 3;
-  fCtx.strokeRect(portX + 20, portY + portH - 72, portW - 40, 56);
-
-  fCtx.fillStyle = '#18181b';
-  fCtx.font = '900 34px sans-serif';
+  // Name: STEVE MARVIN (Ultra-Crisp, High Contrast, 900 Weight)
   fCtx.textAlign = 'center';
-  fCtx.textBaseline = 'middle';
-  fCtx.fillText('STEVE MARVIN', portX + portW / 2, portY + portH - 44);
-
-  // --- Right Column: Vertical Box "EVENT MANAGEMENT" ---
-  const colX = 705;
-  const colY = 270;
-  const colW = 245;
-  const colH = 750;
-
-  fCtx.fillStyle = '#f4efe6';
-  fCtx.fillRect(colX, colY, colW, colH);
-  fCtx.strokeStyle = '#18181b';
-  fCtx.lineWidth = 4;
-  fCtx.strokeRect(colX, colY, colW, colH);
-
-  // Inner decorative rules
-  fCtx.strokeStyle = 'rgba(24, 24, 27, 0.2)';
-  fCtx.lineWidth = 1.5;
-  fCtx.strokeRect(colX + 12, colY + 12, colW - 24, colH - 24);
-
-  // Giant vertical text: EVENT MANAGEMENT
-  fCtx.save();
-  fCtx.translate(colX + colW / 2, colY + colH / 2);
-  fCtx.rotate(Math.PI / 2);
-  fCtx.fillStyle = '#18181b';
-  fCtx.font = '900 62px "Impact", "Arial Black", sans-serif';
-  fCtx.textAlign = 'center';
-  fCtx.textBaseline = 'middle';
-  fCtx.fillText('EVENT MANAGEMENT', 0, 0);
-  fCtx.restore();
-
-  // Corner grid marks in vertical column
-  fCtx.fillStyle = '#18181b';
-  fCtx.fillRect(colX + 18, colY + 20, 8, 8);
-  fCtx.fillRect(colX + colW - 26, colY + 20, 8, 8);
-  fCtx.fillRect(colX + 18, colY + colH - 28, 8, 8);
-  fCtx.fillRect(colX + colW - 26, colY + colH - 28, 8, 8);
-
-  // --- Bottom Section: PORTFOLIO & BRANDS ---
-  const botY = 1055;
-
-  // Dark bottom container
-  fCtx.fillStyle = '#18181b';
-  fCtx.fillRect(64, botY, 896, 290);
-  fCtx.strokeStyle = '#27272a';
-  fCtx.lineWidth = 3;
-  fCtx.strokeRect(64, botY, 896, 290);
-
-  // Title: PORTFOLIO
   fCtx.fillStyle = '#ffffff';
-  fCtx.font = '900 64px "Impact", "Arial Black", sans-serif';
-  fCtx.textAlign = 'left';
-  fCtx.textBaseline = 'middle';
-  fCtx.fillText('PORTFOLIO', 100, botY + 65);
+  fCtx.font = '900 128px sans-serif';
+  fCtx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+  fCtx.shadowBlur = 18;
+  fCtx.shadowOffsetY = 6;
+  fCtx.fillText('STEVE MARVIN', W / 2, 1100);
+  fCtx.shadowBlur = 0;
+  fCtx.shadowOffsetY = 0;
 
-  // Tagline
-  fCtx.fillStyle = '#94a3b8';
-  fCtx.font = 'italic 20px sans-serif';
-  fCtx.fillText("Don't repeat yourself • Create Impact", 430, botY + 65);
+  // Subtitle: SUPERVISOR BRAND ACTIVATION
+  fCtx.fillStyle = '#fb7185';
+  fCtx.font = '900 58px sans-serif';
+  fCtx.fillText('SUPERVISOR BRAND ACTIVATION', W / 2, 1195);
 
-  // Brand Pills
+  // Brand Badge 1: GOC (Purbasari • Amara • Onyx • CleanFace)
   fCtx.fillStyle = 'rgba(255, 255, 255, 0.12)';
-  fCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-  fCtx.lineWidth = 2;
-  fCtx.beginPath();
-  if (fCtx.roundRect) fCtx.roundRect(95, botY + 115, 834, 68, 14);
-  else fCtx.rect(95, botY + 115, 834, 68);
+  fCtx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+  fCtx.lineWidth = 4;
+  drawRoundRect(fCtx, 140, 1280, W - 280, 125, 62);
   fCtx.fill();
   fCtx.stroke();
 
   fCtx.fillStyle = '#ffffff';
-  fCtx.font = 'bold 28px sans-serif';
-  fCtx.textAlign = 'center';
-  fCtx.fillText('Purbasari • CleanFace • Amara • Onyx', 512, botY + 150);
+  fCtx.font = '900 50px sans-serif';
+  fCtx.fillText('GOC (Purbasari • Amara • Onyx • CleanFace)', W / 2, 1360);
 
-  // Ex Kanzler pill
-  fCtx.fillStyle = '#38bdf8';
-  fCtx.font = '900 24px monospace';
-  fCtx.fillText('★ Ex KANZLER (Cimory Group) ★', 512, botY + 220);
+  // Brand Badge 2: Ex KANZLER (Cimory Group)
+  fCtx.fillStyle = 'rgba(56, 189, 248, 0.22)';
+  fCtx.strokeStyle = '#38bdf8';
+  fCtx.lineWidth = 4;
+  drawRoundRect(fCtx, 240, 1445, W - 480, 115, 57);
+  fCtx.fill();
+  fCtx.stroke();
 
-  // Barcode / verification strip
+  fCtx.fillStyle = '#bae6fd';
+  fCtx.font = '900 48px monospace';
+  fCtx.fillText('Ex KANZLER (Cimory Group)', W / 2, 1520);
+
+  // Track Record Tagline Pill
+  fCtx.fillStyle = 'rgba(244, 63, 94, 0.18)';
+  fCtx.strokeStyle = 'rgba(244, 63, 94, 0.6)';
+  fCtx.lineWidth = 3.5;
+  drawRoundRect(fCtx, 160, 1600, W - 320, 105, 52);
+  fCtx.fill();
+  fCtx.stroke();
+
+  fCtx.fillStyle = '#fce7f3';
+  fCtx.font = '900 40px monospace';
+  fCtx.fillText('EVENT MANAGEMENT • BRAND EXPERIENTIAL', W / 2, 1668);
+
+  // Official Pass ID Badge
+  fCtx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+  fCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+  fCtx.lineWidth = 3.5;
+  drawRoundRect(fCtx, 180, 1750, W - 360, 160, 32);
+  fCtx.fill();
+  fCtx.stroke();
+
+  fCtx.fillStyle = '#22c55e';
+  fCtx.font = '900 44px monospace';
+  fCtx.fillText('✔ VERIFIED ID: SM-GOC-2026-VIP', W / 2, 1818);
+
+  fCtx.fillStyle = '#cbd5e1';
+  fCtx.font = '900 34px monospace';
+  fCtx.fillText('ACTIVATION SUPERVISOR • SPECIALIST LEAD', W / 2, 1874);
+
+  // Security Microtext - Clear and sharp at bottom
+  fCtx.fillStyle = '#94a3b8';
+  fCtx.font = '900 28px monospace';
+  fCtx.fillText('SECURITY LEVEL: MAXIMUM 2026 • AUTHORIZED PERSONNEL ONLY', W / 2, 2220);
   fCtx.fillStyle = '#64748b';
-  fCtx.font = 'bold 16px monospace';
-  fCtx.fillText('AUTHENTICATED PASS ID: SM-GOC-2026', 512, botY + 260);
-
-  // Chrome 3D ribbon / chain accents (drawn with shiny silver gradients)
-  const drawSilverRing = (ctx, cx, cy, r, thick) => {
-    const sGrad = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
-    sGrad.addColorStop(0, '#e2e8f0');
-    sGrad.addColorStop(0.3, '#94a3b8');
-    sGrad.addColorStop(0.5, '#ffffff');
-    sGrad.addColorStop(0.7, '#64748b');
-    sGrad.addColorStop(1, '#cbd5e1');
-    ctx.strokeStyle = sGrad;
-    ctx.lineWidth = thick;
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.stroke();
-  };
-
-  drawSilverRing(fCtx, 75, 1260, 48, 14);
-  drawSilverRing(fCtx, 945, 1260, 48, 14);
+  fCtx.font = 'bold 24px monospace';
+  fCtx.fillText('PT GLORIA ORIGITA COSMETICS • OFFICIAL PASS', W / 2, 2275);
 
   const frontBuf = frontCvs.toBuffer('image/png');
   fs.writeFileSync(path.join(assetsDir, 'frontCard.png'), frontBuf);
@@ -271,248 +235,181 @@ async function generateAssets() {
     fs.writeFileSync(path.join(distAssetsDir, 'frontCard.png'), frontBuf);
     fs.writeFileSync(path.join(distAssetsDir, 'frontCard-B_vIkGBe.png'), frontBuf);
   }
-  console.log('✓ Successfully generated frontCard.png (' + frontBuf.length + ' bytes)');
+  console.log('✓ Successfully wrote frontCard.png (' + frontBuf.length + ' bytes)');
 
   // =========================================================================
-  // 2. BACK CARD (1024 x 1440) - EDITORIAL VINTAGE CREAM PASS WITH QR CODE
+  // 2. BACK CARD (1600 x 2400) - OFFICIAL VIP PASS BACK (PORTOFOLIO SPELLING)
   // =========================================================================
-  const backCvs = createCanvas(1024, 1440);
+  const backCvs = createCanvas(W, H);
   const bCtx = backCvs.getContext('2d');
 
-  // Base vintage cream paper
-  bCtx.fillStyle = '#ece7de';
-  bCtx.fillRect(0, 0, 1024, 1440);
+  const bGrad = bCtx.createLinearGradient(0, 0, W, H);
+  bGrad.addColorStop(0, '#0a0d18');
+  bGrad.addColorStop(0.35, '#190e2b');
+  bGrad.addColorStop(0.7, '#120b22');
+  bGrad.addColorStop(1, '#070811');
+  bCtx.fillStyle = bGrad;
+  bCtx.fillRect(0, 0, W, H);
 
-  // Subtle grain
-  bCtx.fillStyle = 'rgba(0, 0, 0, 0.025)';
-  for (let x = 0; x < 1024; x += 6) {
-    for (let y = 0; y < 1440; y += 6) {
-      if ((x * 11 + y * 5) % 17 === 0) {
-        bCtx.fillRect(x, y, 2.5, 2.5);
-      }
-    }
-  }
-
-  // Outer border lines
-  bCtx.strokeStyle = '#18181b';
-  bCtx.lineWidth = 4;
-  bCtx.strokeRect(36, 36, 952, 1368);
-  bCtx.strokeStyle = '#27272a';
-  bCtx.lineWidth = 1.5;
-  bCtx.strokeRect(48, 48, 928, 1344);
-
-  // --- Top Header ---
-  // Left: Hazard / Caution Tape box "SCAN HERE"
-  const hazX = 64;
-  const hazY = 68;
-  const hazW = 280;
-  const hazH = 68;
-
-  bCtx.save();
-  bCtx.fillStyle = '#facc15';
-  bCtx.fillRect(hazX, hazY, hazW, hazH);
-  bCtx.strokeStyle = '#18181b';
-  bCtx.lineWidth = 4;
-  bCtx.strokeRect(hazX, hazY, hazW, hazH);
-
-  // Diagonal black caution stripes
-  bCtx.fillStyle = '#18181b';
-  for (let s = -40; s < hazW + 40; s += 28) {
+  // Background grid
+  bCtx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+  bCtx.lineWidth = 2;
+  for (let x = 60; x < W; x += 64) {
     bCtx.beginPath();
-    bCtx.moveTo(hazX + s, hazY + hazH);
-    bCtx.lineTo(hazX + s + 18, hazY + hazH);
-    bCtx.lineTo(hazX + s + 42, hazY);
-    bCtx.lineTo(hazX + s + 24, hazY);
-    bCtx.fill();
+    bCtx.moveTo(x, 60);
+    bCtx.lineTo(x, H - 60);
+    bCtx.stroke();
+  }
+  for (let y = 60; y < H; y += 64) {
+    bCtx.beginPath();
+    bCtx.moveTo(60, y);
+    bCtx.lineTo(W - 60, y);
+    bCtx.stroke();
   }
 
-  // "SCAN HERE" text pill
-  bCtx.fillStyle = '#18181b';
-  bCtx.fillRect(hazX + 24, hazY + 12, hazW - 48, hazH - 24);
-  bCtx.fillStyle = '#ffffff';
-  bCtx.font = '900 28px "Impact", sans-serif';
-  bCtx.textAlign = 'center';
-  bCtx.textBaseline = 'middle';
-  bCtx.fillText('SCAN HERE', hazX + hazW / 2, hazY + hazH / 2);
-  bCtx.restore();
-
-  // Right: GOC Institution Logo & Text
-  const bEmbX = 740;
-  const bEmbY = 98;
-  bCtx.fillStyle = '#0284c7';
-  bCtx.beginPath();
-  bCtx.arc(bEmbX, bEmbY, 24, 0, Math.PI * 2);
-  bCtx.fill();
-  bCtx.strokeStyle = '#f59e0b';
-  bCtx.lineWidth = 3;
+  // Outer Border
+  bCtx.strokeStyle = '#f43f5e';
+  bCtx.lineWidth = 22;
+  drawRoundRect(bCtx, 36, 36, W - 72, H - 72, 48);
   bCtx.stroke();
+
+  // Inner bevel stroke
+  bCtx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+  bCtx.lineWidth = 4;
+  drawRoundRect(bCtx, 60, 60, W - 120, H - 120, 36);
+  bCtx.stroke();
+
+  // Title: STEVE MARVIN
   bCtx.fillStyle = '#ffffff';
-  bCtx.font = '900 20px sans-serif';
+  bCtx.font = '900 110px sans-serif';
   bCtx.textAlign = 'center';
-  bCtx.fillText('GOC', bEmbX, bEmbY + 7);
+  bCtx.fillText('STEVE MARVIN', W / 2, 175);
+
+  bCtx.fillStyle = '#fb7185';
+  bCtx.font = '900 52px sans-serif';
+  bCtx.fillText('SUPERVISOR BRAND ACTIVATION', W / 2, 252);
+
+  // Header Pill
+  bCtx.fillStyle = 'rgba(244, 63, 94, 0.30)';
+  bCtx.strokeStyle = 'rgba(244, 63, 94, 0.9)';
+  bCtx.lineWidth = 4;
+  drawRoundRect(bCtx, 160, 305, W - 320, 96, 48);
+  bCtx.fill();
+  bCtx.stroke();
+
+  bCtx.fillStyle = '#ffffff';
+  bCtx.font = '900 38px monospace';
+  bCtx.fillText('CORE COMPETENCIES & TRACK RECORD', W / 2, 368);
+
+  const skills = [
+    '✦ Stage Production & Event Planning',
+    '✦ Multi-Brand Experiential Marketing',
+    '✦ Nationwide Roadshow Orchestration',
+    '✦ FMCG & Beauty Market Strategy',
+    '✦ KOL, Community & Media Outreach',
+    '✦ Vendor & Logistics Negotiation',
+    '✦ Budget Allocation & ROI Optimization',
+  ];
 
   bCtx.textAlign = 'left';
-  bCtx.fillStyle = '#18181b';
-  bCtx.font = '900 20px sans-serif';
-  bCtx.fillText('PT GLORIA ORIGITA', 775, 88);
-  bCtx.font = '700 16px sans-serif';
-  bCtx.fillStyle = '#52525b';
-  bCtx.fillText('COSMETICS • ID', 775, 110);
+  skills.forEach((skill, idx) => {
+    const itemY = 515 + idx * 115;
 
-  // --- Center Container: CONNECT OUR SOSMED + QR CODE ---
-  const boxX = 64;
-  const boxY = 175;
-  const boxW = 600;
-  const boxH = 820;
+    bCtx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+    bCtx.strokeStyle = 'rgba(255, 255, 255, 0.30)';
+    bCtx.lineWidth = 3;
+    drawRoundRect(bCtx, 100, itemY - 65, W - 200, 95, 24);
+    bCtx.fill();
+    bCtx.stroke();
 
-  bCtx.fillStyle = '#18181b';
-  bCtx.fillRect(boxX, boxY, boxW, boxH);
-  bCtx.strokeStyle = '#27272a';
-  bCtx.lineWidth = 4;
-  bCtx.strokeRect(boxX, boxY, boxW, boxH);
+    bCtx.fillStyle = '#ffffff';
+    bCtx.font = '900 46px sans-serif';
+    bCtx.fillText(skill, 150, itemY);
+  });
 
-  // Header: CONNECT OUR SOSMED
-  bCtx.fillStyle = '#ffffff';
-  bCtx.font = '900 36px "Impact", sans-serif';
+  // Portofolio Brands Box (PORTOFOLIO spelling per request!)
+  const boxY = 1350;
+  bCtx.fillStyle = 'rgba(244, 63, 94, 0.25)';
+  bCtx.strokeStyle = '#f43f5e';
+  bCtx.lineWidth = 5;
+  drawRoundRect(bCtx, 100, boxY, W - 200, 340, 36);
+  bCtx.fill();
+  bCtx.stroke();
+
+  bCtx.fillStyle = '#fda4af';
+  bCtx.font = '900 44px monospace';
   bCtx.textAlign = 'center';
-  bCtx.textBaseline = 'middle';
-  bCtx.fillText('CONNECT OUR SOSMED', boxX + boxW / 2, boxY + 60);
+  bCtx.fillText('PORTOFOLIO BRANDS', W / 2, boxY + 75);
 
-  bCtx.strokeStyle = '#38bdf8';
-  bCtx.lineWidth = 3;
-  bCtx.beginPath();
-  bCtx.moveTo(boxX + 60, boxY + 95);
-  bCtx.lineTo(boxX + boxW - 60, boxY + 95);
+  bCtx.fillStyle = '#ffffff';
+  bCtx.font = '900 62px sans-serif';
+  bCtx.fillText('Purbasari • CleanFace • Amara • Onyx', W / 2, boxY + 175);
+
+  bCtx.fillStyle = '#7dd3fc';
+  bCtx.font = '900 48px monospace';
+  bCtx.fillText('Ex KANZLER (Cimory Group)', W / 2, boxY + 265);
+
+  // Authenticated Pass Seal with simulated QR
+  const authY = 1735;
+  bCtx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+  bCtx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+  bCtx.lineWidth = 4;
+  drawRoundRect(bCtx, 100, authY, W - 200, 360, 36);
+  bCtx.fill();
   bCtx.stroke();
 
   // QR Code Frame
-  const qrX = boxX + 65;
-  const qrY = boxY + 130;
-  const qrS = 470;
-
+  const qrX = 180;
+  const qrY = authY + 45;
+  const qrS = 270;
   bCtx.fillStyle = '#ffffff';
-  bCtx.fillRect(qrX, qrY, qrS, qrS);
-  bCtx.strokeStyle = '#e2e8f0';
-  bCtx.lineWidth = 4;
-  bCtx.strokeRect(qrX, qrY, qrS, qrS);
+  drawRoundRect(bCtx, qrX, qrY, qrS, qrS, 16);
+  bCtx.fill();
 
-  // Large realistic QR code markers
-  const drawQrCorner = (ctx, x, y, size) => {
-    ctx.fillStyle = '#0f172a';
-    ctx.fillRect(x, y, size, size);
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(x + size * 0.18, y + size * 0.18, size * 0.64, size * 0.64);
-    ctx.fillStyle = '#0f172a';
-    ctx.fillRect(x + size * 0.36, y + size * 0.36, size * 0.28, size * 0.28);
-  };
-
-  drawQrCorner(bCtx, qrX + 32, qrY + 32, 110);
-  drawQrCorner(bCtx, qrX + qrS - 142, qrY + 32, 110);
-  drawQrCorner(bCtx, qrX + 32, qrY + qrS - 142, 110);
-
-  // QR pixel matrix
   bCtx.fillStyle = '#0f172a';
-  const qrGrid = 22;
-  const cell = (qrS - 64) / qrGrid;
-  for (let r = 0; r < qrGrid; r++) {
-    for (let c = 0; c < qrGrid; c++) {
-      // Exclude corners
-      const isCorner =
-        (r < 7 && c < 7) ||
-        (r < 7 && c >= qrGrid - 7) ||
-        (r >= qrGrid - 7 && c < 7);
-      if (!isCorner) {
-        if ((r * 13 + c * 19 + (r * c) % 5) % 2 === 0) {
-          bCtx.fillRect(qrX + 32 + c * cell, qrY + 32 + r * cell, cell - 1, cell - 1);
-        }
-      }
-    }
-  }
+  bCtx.fillRect(qrX + 25, qrY + 25, 65, 65);
+  bCtx.fillRect(qrX + qrS - 90, qrY + 25, 65, 65);
+  bCtx.fillRect(qrX + 25, qrY + qrS - 90, 65, 65);
 
-  // QR bottom text
-  bCtx.fillStyle = '#94a3b8';
-  bCtx.font = 'bold 20px monospace';
-  bCtx.textAlign = 'center';
-  bCtx.fillText('SCAN TO CONNECT ON LINKEDIN & INSTAGRAM', boxX + boxW / 2, boxY + boxH - 55);
-
-  // --- Right Column: Vertical Box "SUPERVISOR BRAND ACTIVATION" ---
-  const bColX = 705;
-  const bColY = 175;
-  const bColW = 245;
-  const bColH = 820;
-
-  bCtx.fillStyle = '#f4efe6';
-  bCtx.fillRect(bColX, bColY, bColW, bColH);
-  bCtx.strokeStyle = '#18181b';
-  bCtx.lineWidth = 4;
-  bCtx.strokeRect(bColX, bColY, bColW, bColH);
-
-  bCtx.save();
-  bCtx.translate(bColX + bColW / 2, bColY + bColH / 2);
-  bCtx.rotate(Math.PI / 2);
-  bCtx.fillStyle = '#18181b';
-  bCtx.font = '900 58px "Impact", "Arial Black", sans-serif';
-  bCtx.textAlign = 'center';
-  bCtx.textBaseline = 'middle';
-  bCtx.fillText('TEKNIK & STRATEGI BRAND', 0, 0);
-  bCtx.restore();
-
-  // --- Bottom Container Pill: STEVE MARVIN ---
-  const bBotY = 1040;
-  bCtx.fillStyle = '#18181b';
-  bCtx.fillRect(64, bBotY, 896, 305);
-  bCtx.strokeStyle = '#27272a';
-  bCtx.lineWidth = 3;
-  bCtx.strokeRect(64, bBotY, 896, 305);
-
-  // Name
   bCtx.fillStyle = '#ffffff';
-  bCtx.font = '900 52px sans-serif';
+  bCtx.fillRect(qrX + 40, qrY + 40, 35, 35);
+  bCtx.fillRect(qrX + qrS - 75, qrY + 40, 35, 35);
+  bCtx.fillRect(qrX + 40, qrY + qrS - 75, 35, 35);
+
+  bCtx.fillStyle = '#0f172a';
+  bCtx.fillRect(qrX + 50, qrY + 50, 15, 15);
+  bCtx.fillRect(qrX + qrS - 65, qrY + 50, 15, 15);
+  bCtx.fillRect(qrX + 50, qrY + qrS - 65, 15, 15);
+
+  // QR inner data patterns
+  bCtx.fillRect(qrX + 115, qrY + 35, 25, 25);
+  bCtx.fillRect(qrX + 120, qrY + 80, 22, 35);
+  bCtx.fillRect(qrX + 110, qrY + 130, 38, 20);
+  bCtx.fillRect(qrX + 115, qrY + 175, 30, 30);
+  bCtx.fillRect(qrX + 160, qrY + 105, 32, 32);
+  bCtx.fillRect(qrX + 195, qrY + 155, 38, 25);
+  bCtx.fillRect(qrX + 80, qrY + 42, 20, 20);
+  bCtx.fillRect(qrX + 45, qrY + 86, 20, 20);
+  bCtx.fillRect(qrX + 92, qrY + 92, 32, 32);
+
+  bCtx.textAlign = 'left';
+  bCtx.fillStyle = '#22c55e';
+  bCtx.font = '900 52px monospace';
+  bCtx.fillText('✔ AUTHENTICATED PASS', 510, authY + 115);
+
+  bCtx.fillStyle = '#f8fafc';
+  bCtx.font = '900 42px monospace';
+  bCtx.fillText('GOC BRAND ACTIVATION TEAM', 510, authY + 185);
+
+  bCtx.fillStyle = '#cbd5e1';
+  bCtx.font = '900 34px monospace';
+  bCtx.fillText('SCAN TO CONNECT & VERIFY', 510, authY + 250);
+
+  // Bottom microtext (PORTOFOLIO spelling!)
   bCtx.textAlign = 'center';
-  bCtx.fillText('STEVE MARVIN', 512, bBotY + 70);
-
-  // Subtitle
-  bCtx.fillStyle = '#38bdf8';
-  bCtx.font = 'bold 28px sans-serif';
-  bCtx.fillText('Supervisor Brand Activation', 512, bBotY + 125);
-
-  // Line
-  bCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-  bCtx.lineWidth = 2;
-  bCtx.beginPath();
-  bCtx.moveTo(140, bBotY + 155);
-  bCtx.lineTo(884, bBotY + 155);
-  bCtx.stroke();
-
-  // Credentials
-  bCtx.fillStyle = '#e2e8f0';
-  bCtx.font = 'bold 24px sans-serif';
-  bCtx.fillText('GOC (Purbasari • CleanFace • Amara • Onyx)', 512, bBotY + 195);
-
-  bCtx.fillStyle = '#f59e0b';
-  bCtx.font = '900 22px monospace';
-  bCtx.fillText('Ex KANZLER (Cimory Group) • Event Management Specialist', 512, bBotY + 245);
-
-  // Vintage decorative corner filigree
-  const drawFiligree = (ctx, x, y, angle) => {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(angle);
-    ctx.strokeStyle = '#18181b';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.arc(0, 0, 30, 0, Math.PI / 2);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(0, 0, 16, 0, Math.PI / 2);
-    ctx.stroke();
-    ctx.restore();
-  };
-
-  drawFiligree(bCtx, 58, 58, 0);
-  drawFiligree(bCtx, 966, 58, Math.PI / 2);
-  drawFiligree(bCtx, 966, 1382, Math.PI);
-  drawFiligree(bCtx, 58, 1382, -Math.PI / 2);
+  bCtx.fillStyle = '#94a3b8';
+  bCtx.font = '900 24px monospace';
+  bCtx.fillText('STEVE MARVIN • GOC PORTOFOLIO 2026 • ALL RIGHTS RESERVED', W / 2, 2310);
 
   const backBuf = backCvs.toBuffer('image/png');
   fs.writeFileSync(path.join(assetsDir, 'backCard.png'), backBuf);
@@ -521,63 +418,83 @@ async function generateAssets() {
     fs.writeFileSync(path.join(distAssetsDir, 'backCard.png'), backBuf);
     fs.writeFileSync(path.join(distAssetsDir, 'backCard-BGPpqBds.png'), backBuf);
   }
-  console.log('✓ Successfully generated backCard.png (' + backBuf.length + ' bytes)');
+  console.log('✓ Successfully wrote backCard.png (' + backBuf.length + ' bytes)');
 
   // =========================================================================
-  // 3. STRAP BAND (512 x 2048) - EXACT alfari.my.id MATTE BLACK STRAP
+  // 3. STRAP BAND (512 x 2048) - EXACT alfari.my.id "Steve Marvin" STRAP
   // =========================================================================
-  const bandCvs = createCanvas(512, 2048);
+  const bandW = 512;
+  const bandH = 2048;
+  const bandCvs = createCanvas(bandW, bandH);
   const bandCtx = bandCvs.getContext('2d');
 
-  // Matte black webbing strap base
-  bandCtx.fillStyle = '#0f1118';
-  bandCtx.fillRect(0, 0, 512, 2048);
+  // Deep matte black woven fabric base
+  bandCtx.fillStyle = '#0a0d14';
+  bandCtx.fillRect(0, 0, bandW, bandH);
 
-  // Micro fabric edge stitch
-  bandCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-  bandCtx.lineWidth = 4;
-  bandCtx.strokeRect(18, 0, 476, 2048);
+  // Subtle woven ribbon texture
+  bandCtx.fillStyle = 'rgba(255, 255, 255, 0.025)';
+  for (let y = 0; y < bandH; y += 6) {
+    bandCtx.fillRect(0, y, bandW, 2);
+  }
 
-  // 2 Repeating Modules
-  for (let m = 0; m < 2; m++) {
-    const yOffset = m * 1024;
+  // Double high-contrast white & silver edge stitches
+  bandCtx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+  bandCtx.lineWidth = 6;
+  bandCtx.strokeRect(20, 0, bandW - 40, bandH);
 
-    // Circular white outline monogram Ⓢ (circle with S)
-    const monoX = 256;
-    const monoY = yOffset + 160;
+  bandCtx.strokeStyle = 'rgba(255, 255, 255, 0.28)';
+  bandCtx.lineWidth = 2.5;
+  bandCtx.strokeRect(34, 0, bandW - 68, bandH);
+
+  // Helper to draw Monogram (S) & Vertical Name at specific Y coordinate
+  const drawBrandingSegment = (startY) => {
+    const monoX = bandW / 2;
+    const monoY = startY;
     const monoR = 64;
 
+    // Outer crisp white ring
     bandCtx.strokeStyle = '#ffffff';
-    bandCtx.lineWidth = 6;
+    bandCtx.lineWidth = 11;
     bandCtx.beginPath();
     bandCtx.arc(monoX, monoY, monoR, 0, Math.PI * 2);
     bandCtx.stroke();
 
+    // Letter S inside circle
     bandCtx.fillStyle = '#ffffff';
-    bandCtx.font = '900 68px sans-serif';
+    bandCtx.font = '900 82px sans-serif';
     bandCtx.textAlign = 'center';
     bandCtx.textBaseline = 'middle';
     bandCtx.fillText('S', monoX, monoY + 2);
 
-    // Text running vertically downwards along the strap: "Steve Marvin"
+    // Vertical Typography: Steve Marvin (reading top-to-bottom, unmirrored)
     bandCtx.save();
-    bandCtx.translate(monoX, yOffset + 320);
+    bandCtx.translate(monoX, startY + 115);
     bandCtx.rotate(Math.PI / 2);
 
-    // Clean, elegant white typography
-    bandCtx.fillStyle = '#ffffff';
-    bandCtx.font = 'bold 64px sans-serif';
     bandCtx.textAlign = 'left';
     bandCtx.textBaseline = 'middle';
+
+    // Primary Name: Steve Marvin
+    bandCtx.fillStyle = '#ffffff';
+    bandCtx.font = '900 62px sans-serif';
+    bandCtx.shadowColor = 'rgba(0, 0, 0, 0.95)';
+    bandCtx.shadowBlur = 10;
+    bandCtx.shadowOffsetY = 3;
     bandCtx.fillText('Steve Marvin', 0, 0);
 
-    // Subtitle
-    bandCtx.fillStyle = '#94a3b8';
-    bandCtx.font = 'bold 42px sans-serif';
-    bandCtx.fillText('• Brand Activation', 420, 0);
-
     bandCtx.restore();
-  }
+  };
+
+  // Repeating branding along the strap (Steve Marvin + Monogram S)
+  // Segment 1: Upper strap (near top anchor)
+  drawBrandingSegment(260);
+
+  // Segment 2: Mid strap (visible when pulled / dragged)
+  drawBrandingSegment(820);
+
+  // Segment 3: Primary resting segment (visible directly above clamp - exact alfari.my.id placement!)
+  drawBrandingSegment(1380);
 
   const bandBuf = bandCvs.toBuffer('image/png');
   fs.writeFileSync(path.join(assetsDir, 'band.png'), bandBuf);

@@ -2,35 +2,35 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
 
 /**
- * Ultra-Responsive 3D Lanyard & VIP ID Card Component (alfari.my.id Style)
+ * Ultra-Realistic 3D Lanyard & VIP ID Card Component (alfari.my.id Style)
  *
  * Features:
- * - Editorial brutalist vintage cream ID card insert with bold typography
- * - Clean matte black strap with circular monogram (S) and "Steve Marvin" branding
- * - Chrome split-ring clip & crimp clamp passing directly through card slot
- * - Balanced studio-grade softbox lighting (no colored laser hotspots)
- * - Standard UV mapping on both sides: front & back text are 100% clearly readable left-to-right
- * - Realistic rubbery/elastic physics with progressive resistance when dragged ("lebih melawan")
- * - Satisfying spring snap-back recoil when released
- * - Reliable click/tap detection to smoothly flip 180° between Front and Back
- * - Interactive bottom toggle badge that also flips the card on click
- * - Touch-action: none for seamless, fluid dragging on mobile devices without page scroll
+ * - Perfectly proportioned compact 3D VIP ID Card (no barcode, maximum text legibility)
+ * - True 3D ID badge casing with beveled bumper, realistic punch slot, and physical depth
+ * - Physically unified assembly: Chrome split keyring passes directly through slot hole,
+ *   connecting to metallic crimp clamp, seamlessly gripping the matte black fabric lanyard strap
+ * - Lanyard enters from above the viewport, hanging down naturally with realistic physics
+ * - Smooth Catmull-Rom Verlet physics with progressive elastic resistance ("lebih melawan")
+ *   and satisfying spring recoil
+ * - Instant, responsive tap/click to smoothly flip 180° between Front and Back (with non-inverted text)
+ * - Studio softbox lighting rig (zero colored laser hotspots or glare)
+ * - Full HiDPI ResizeObserver support for razor-sharp rendering on all screens
  */
 
 const CARD_SIZES = {
-  portrait: [1.4, 2.05],
+  portrait: [1.02, 1.53],
 };
-const THICKNESS = 0.018;
-const BEVEL = 0.007;
-const JOINTS = 7;
+const THICKNESS = 0.016;
+const BEVEL = 0.005;
+const JOINTS = 8;
 const SAMPLES = 64;
-const STRAP_WIDTH = 0.34;
-const RING_RADIUS = 0.085;
-const RING_TUBE = 0.0125;
-const EYELET_RADIUS = 0.034;
-const CLAMP_BODY = 0.14;
+const STRAP_WIDTH = 0.20;
+const RING_RADIUS = 0.065;
+const RING_TUBE = 0.009;
+const EYELET_RADIUS = 0.026;
+const CLAMP_BODY = 0.095;
 
-const BAND_COLUMNS = [0, 0.07, 0.93, 1];
+const BAND_COLUMNS = [0, 0.08, 0.92, 1];
 const BAND_BEND = [-0.95, -0.28, 0.28, 0.95];
 
 const traceRoundedRect = (shape, x, y, width, height, radius) => {
@@ -49,7 +49,9 @@ const traceRoundedRect = (shape, x, y, width, height, radius) => {
 const buildCardGeometry = (width, height, radius) => {
   const outline = new THREE.Shape();
   traceRoundedRect(outline, -width / 2, -height / 2, width, height, radius);
-  const slot = { width: 0.34, height: 0.065, y: height / 2 - 0.12 };
+
+  // Physical punch slot at top center with rounded ends
+  const slot = { width: 0.25, height: 0.055, y: height / 2 - 0.085 };
   const hole = new THREE.Path();
   traceRoundedRect(hole, -slot.width / 2, slot.y - slot.height / 2, slot.width, slot.height, slot.height / 2);
   outline.holes.push(hole);
@@ -60,13 +62,13 @@ const buildCardGeometry = (width, height, radius) => {
     bevelEnabled: true,
     bevelThickness: BEVEL,
     bevelSize: BEVEL,
-    bevelSegments: 5,
-    curveSegments: 24,
+    bevelSegments: 6,
+    curveSegments: 32,
   });
   body.translate(0, 0, -THICKNESS / 2);
 
   // Front face (standard UV mapping)
-  const frontFace = new THREE.ShapeGeometry(outline, 24);
+  const frontFace = new THREE.ShapeGeometry(outline, 32);
   const posFront = frontFace.getAttribute('position');
   const uvFront = frontFace.getAttribute('uv');
   for (let i = 0; i < posFront.count; i++) {
@@ -75,7 +77,7 @@ const buildCardGeometry = (width, height, radius) => {
   uvFront.needsUpdate = true;
 
   // Back face: standard UV mapping so when cardGroup rotates 180° around Y, text reads normally left-to-right!
-  const backFace = new THREE.ShapeGeometry(outline, 24);
+  const backFace = new THREE.ShapeGeometry(outline, 32);
   const posBack = backFace.getAttribute('position');
   const uvBack = backFace.getAttribute('uv');
   for (let i = 0; i < posBack.count; i++) {
@@ -83,22 +85,22 @@ const buildCardGeometry = (width, height, radius) => {
   }
   uvBack.needsUpdate = true;
 
-  return { body, frontFace, backFace };
+  return { body, frontFace, backFace, slotY: slot.y };
 };
 
 const buildClampGeometry = (width) => {
   const shape = new THREE.Shape();
-  const w = width * 1.15;
-  traceRoundedRect(shape, -w / 2 + 0.014, -CLAMP_BODY / 2 + 0.014, w - 0.028, CLAMP_BODY - 0.028, 0.024);
+  const w = width * 1.1;
+  traceRoundedRect(shape, -w / 2, -CLAMP_BODY / 2, w, CLAMP_BODY, 0.022);
   const geometry = new THREE.ExtrudeGeometry(shape, {
-    depth: 0.022,
+    depth: 0.024,
     bevelEnabled: true,
-    bevelThickness: 0.014,
-    bevelSize: 0.014,
-    bevelSegments: 6,
-    curveSegments: 12,
+    bevelThickness: 0.010,
+    bevelSize: 0.010,
+    bevelSegments: 5,
+    curveSegments: 16,
   });
-  geometry.translate(0, 0, -0.011);
+  geometry.translate(0, 0, -0.012);
   return geometry;
 };
 
@@ -120,9 +122,9 @@ const buildBandGeometry = (count) => {
 };
 
 export default function Lanyard({
-  frontImage = '/assets/frontCard.png?v=20261029_alfari',
-  backImage = '/assets/backCard.png?v=20261029_alfari',
-  strapImage = '/assets/band.png?v=20261029_alfari',
+  frontImage = '/assets/frontCard.png?v=20261029_v10',
+  backImage = '/assets/backCard.png?v=20261029_v10',
+  strapImage = '/assets/band.png?v=20261029_v10',
   playBeep,
   className = '',
   style,
@@ -131,6 +133,12 @@ export default function Lanyard({
   const [isDragging, setIsDragging] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
   const triggerFlipRef = useRef(null);
+
+  // Stable audio ref to prevent 3D WebGL flickering on mute/unmute
+  const playBeepRef = useRef(playBeep);
+  useEffect(() => {
+    playBeepRef.current = playBeep;
+  }, [playBeep]);
 
   const handleBadgeClick = useCallback(() => {
     triggerFlipRef.current?.();
@@ -141,24 +149,27 @@ export default function Lanyard({
     if (!container) return;
 
     let width = container.clientWidth || 360;
-    let height = container.clientHeight || 580;
+    let height = container.clientHeight || 540;
     const isMobile = (window.innerWidth || width) < 640;
 
     let renderer;
     try {
-      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance',
+      });
     } catch {
       return;
     }
 
-    // Full HiDPI / Retina pixel ratio
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2.5);
     renderer.setPixelRatio(pixelRatio);
-    renderer.setSize(width, height);
+    renderer.setSize(width, height, false);
     renderer.setClearColor(0x000000, 0);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.15;
 
     const canvas = renderer.domElement;
     canvas.className = 'block w-full h-full cursor-grab active:cursor-grabbing select-none touch-none';
@@ -169,112 +180,117 @@ export default function Lanyard({
     const anisotropy = Math.min(16, renderer.capabilities.getMaxAnisotropy());
     const scene = new THREE.Scene();
 
-    // Perspective Camera: framed so card is sleek and elegant (alfari.my.id proportions)
+    // Perspective Camera: Framed so the card is compact, sharp, and perfectly proportioned
     const camera = new THREE.PerspectiveCamera(28, width / height, 0.1, 100);
-    camera.position.set(0, 0.18, isMobile ? 6.0 : 6.4);
+    camera.position.set(0, 0.04, isMobile ? 4.9 : 5.2);
 
-    // Balanced Studio Softbox Lighting Rig (no colored laser hotspots)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 2.8);
+    // Balanced Studio Softbox Lighting Rig (Ultra-even illumination, zero glare hotspots)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 2.6);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 2.6);
-    keyLight.position.set(1.5, 4, 5);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.2);
+    keyLight.position.set(1.5, 3.5, 4.5);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0xffffff, 1.8);
-    fillLight.position.set(-2.5, -1, 4);
+    const fillLight = new THREE.DirectionalLight(0xffffff, 1.4);
+    fillLight.position.set(-2.5, -0.5, 3.5);
     scene.add(fillLight);
 
-    const topLight = new THREE.DirectionalLight(0xffffff, 1.4);
-    topLight.position.set(0, 5, 2);
-    scene.add(topLight);
+    const rimLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    rimLight.position.set(0, 4.0, 1.5);
+    scene.add(rimLight);
 
     // Card dimensions & geometries
     const [cardW, cardH] = CARD_SIZES.portrait;
-    const ringY = cardH / 2 - 0.12;
-    const hangY = ringY + RING_RADIUS + RING_TUBE;
+    const cardGeom = buildCardGeometry(cardW, cardH, 0.20);
 
-    // Direct TextureLoader for razor-sharp textures
+    // Direct TextureLoader with maximum anisotropy & mipmaps for pin-sharp text
     const textureLoader = new THREE.TextureLoader();
 
-    const loadTex = (url, isRepeat = false) => {
+    const loadTex = (url) => {
       const tex = textureLoader.load(url);
       tex.colorSpace = THREE.SRGBColorSpace;
       tex.anisotropy = anisotropy;
       tex.generateMipmaps = true;
       tex.minFilter = THREE.LinearMipmapLinearFilter;
       tex.magFilter = THREE.LinearFilter;
-      if (isRepeat) {
-        tex.wrapS = THREE.RepeatWrapping;
-        tex.wrapT = THREE.RepeatWrapping;
-      }
       return tex;
     };
 
     const frontTexture = loadTex(frontImage);
     const backTexture = loadTex(backImage);
-    const strapTexture = loadTex(strapImage, true);
+    const strapTexture = loadTex(strapImage);
+    strapTexture.wrapS = THREE.ClampToEdgeWrapping;
+    strapTexture.wrapT = THREE.ClampToEdgeWrapping;
 
-    // Satin-smooth card paper insert finish
-    const frontMaterial = new THREE.MeshPhysicalMaterial({
+    // Materials: Matte-satin card finish for crisp, legible text without specular glare
+    const frontMaterial = new THREE.MeshStandardMaterial({
       map: frontTexture,
-      color: 0xffffff,
-      roughness: 0.22,
-      metalness: 0.0,
-      clearcoat: 0.35,
-      clearcoatRoughness: 0.08,
-    });
-    const backMaterial = new THREE.MeshPhysicalMaterial({
-      map: backTexture,
-      color: 0xffffff,
-      roughness: 0.22,
-      metalness: 0.0,
-      clearcoat: 0.35,
-      clearcoatRoughness: 0.08,
-    });
-    const edgeMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0x18181b,
-      roughness: 0.40,
-      metalness: 0.1,
-    });
-    const metalMaterial = new THREE.MeshStandardMaterial({
-      color: 0xf1f5f9,
-      roughness: 0.14,
-      metalness: 0.98,
-    });
-    // Matte black strap material
-    const bandMaterial = new THREE.MeshPhysicalMaterial({
-      map: strapTexture,
-      color: 0xffffff,
       roughness: 0.45,
       metalness: 0.0,
-      clearcoat: 0.12,
-      clearcoatRoughness: 0.15,
+    });
+    const backMaterial = new THREE.MeshStandardMaterial({
+      map: backTexture,
+      roughness: 0.45,
+      metalness: 0.0,
+    });
+    // Dark obsidian / graphite polycarbonate protective bumper
+    const edgeMaterial = new THREE.MeshStandardMaterial({
+      color: 0x141722,
+      roughness: 0.35,
+      metalness: 0.2,
+    });
+    // Shiny chrome metal for split ring and crimp clamp
+    const metalMaterial = new THREE.MeshStandardMaterial({
+      color: 0xf1f5f9,
+      roughness: 0.15,
+      metalness: 0.96,
+    });
+    // Matte black fabric lanyard ribbon
+    const bandMaterial = new THREE.MeshStandardMaterial({
+      map: strapTexture,
+      roughness: 0.55,
+      metalness: 0.05,
       side: THREE.DoubleSide,
     });
 
-    // Geometries
-    const cardGeom = buildCardGeometry(cardW, cardH, 0.22);
+    // Assembling 3D ID Card Group
     const cardGroup = new THREE.Group();
     const bodyMesh = new THREE.Mesh(cardGeom.body, edgeMaterial);
     const frontMesh = new THREE.Mesh(cardGeom.frontFace, frontMaterial);
     const backMesh = new THREE.Mesh(cardGeom.backFace, backMaterial);
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(RING_RADIUS, RING_TUBE, 18, 72), metalMaterial);
 
-    // Generous Invisible Hit Box so clicks and drags never miss, even when tilted or rotating
+    // Split Keyring: passes right through the top punch slot hole!
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(RING_RADIUS, RING_TUBE, 16, 64), metalMaterial);
+
+    // Invisible Hit Box for frictionless drag and tap detection
     const hitBox = new THREE.Mesh(
-      new THREE.BoxGeometry(cardW * 1.35, cardH * 1.35, 0.5),
+      new THREE.BoxGeometry(cardW * 1.3, cardH * 1.25, 0.4),
       new THREE.MeshBasicMaterial({ visible: false })
     );
 
     frontMesh.position.z = THICKNESS / 2 + BEVEL + 0.0006;
     backMesh.rotation.y = Math.PI;
     backMesh.position.z = -(THICKNESS / 2 + BEVEL + 0.0006);
-    ring.position.set(0, ringY, 0);
-    ring.rotation.y = Math.PI / 2 - 0.7;
+
+    // Position split ring centered in the card's punched slot
+    const slotY = cardGeom.slotY;
+    ring.position.set(0, slotY + 0.045, 0);
+    ring.rotation.y = Math.PI / 2 - 0.25;
 
     cardGroup.add(bodyMesh, frontMesh, backMesh, ring, hitBox);
     scene.add(cardGroup);
+
+    // Metal Crimp Clamp: holds the strap and hooks into the top of the split ring
+    const clampGroup = new THREE.Group();
+    const clampMesh = new THREE.Mesh(buildClampGeometry(STRAP_WIDTH), metalMaterial);
+    clampMesh.position.y = EYELET_RADIUS + CLAMP_BODY / 2 - 0.004;
+
+    const clampEyelet = new THREE.Mesh(new THREE.TorusGeometry(EYELET_RADIUS, 0.010, 14, 40), metalMaterial);
+    clampEyelet.position.y = EYELET_RADIUS;
+
+    clampGroup.add(clampMesh, clampEyelet);
+    scene.add(clampGroup);
 
     // Band Ribbon Mesh
     const bandGeometry = buildBandGeometry(SAMPLES);
@@ -282,18 +298,10 @@ export default function Lanyard({
     band.frustumCulled = false;
     scene.add(band);
 
-    // Metal Clamp & Eyelet
-    const clampGroup = new THREE.Group();
-    const clampMesh = new THREE.Mesh(buildClampGeometry(STRAP_WIDTH), metalMaterial);
-    clampMesh.position.y = EYELET_RADIUS + CLAMP_BODY / 2 - 0.004;
-    const eyelet = new THREE.Mesh(new THREE.TorusGeometry(EYELET_RADIUS, 0.010, 16, 44), metalMaterial);
-    clampGroup.add(clampMesh, eyelet);
-    scene.add(clampGroup);
-
     // Physics Simulation State
-    // Short strap anchor at 1.65 so the lanyard is short, taut, and resists pulling strongly
-    const anchor = new THREE.Vector3(0, 1.65, 0);
-    const restY = 0.04;
+    // Anchor reaches all the way to the top of the screen (strictly vertical, alfari.my.id style)
+    const anchor = new THREE.Vector3(0, 3.5, 0);
+    const restY = -0.05;
     const restPos = new THREE.Vector3(0, restY, 0);
     const cardPos = new THREE.Vector3(0, restY, 0);
     const cardVel = new THREE.Vector3(0, 0, 0);
@@ -304,19 +312,24 @@ export default function Lanyard({
     // Flip function callable from pointer tap and UI button
     const flipCard = () => {
       targetFlipAngle += Math.PI;
-      playBeep?.(850);
+      playBeepRef.current?.(850);
       setIsFlipped((prev) => !prev);
     };
     triggerFlipRef.current = flipCard;
 
-    // Short elastic rubber-band Verlet rope nodes along strap
+    // Clamp & Strap Attachment Offsets (relative to card center)
+    const clampOffset = new THREE.Vector3(0, slotY + 0.045 + RING_RADIUS + EYELET_RADIUS * 0.7, 0);
+    const strapAttachOffset = new THREE.Vector3(0, slotY + 0.045 + RING_RADIUS + EYELET_RADIUS + CLAMP_BODY * 0.8, 0);
+
+    // Verlet rope nodes along strap
     const nodes = Array.from({ length: JOINTS + 1 }, () => new THREE.Vector3());
     const prevNodes = Array.from({ length: JOINTS + 1 }, () => new THREE.Vector3());
-    const restLen = 0.10;
 
+    // Initialize nodes straight down from anchor to attachment point
+    const initialAttach = strapAttachOffset.clone().add(cardPos);
     for (let i = 0; i <= JOINTS; i++) {
       const frac = i / JOINTS;
-      nodes[i].set(0, anchor.y - frac * (anchor.y - (cardPos.y + hangY)), 0);
+      nodes[i].lerpVectors(anchor, initialAttach, frac);
       prevNodes[i].copy(nodes[i]);
     }
 
@@ -324,8 +337,6 @@ export default function Lanyard({
     const points = Array.from({ length: SAMPLES }, () => new THREE.Vector3());
     const sides = Array.from({ length: SAMPLES }, () => new THREE.Vector3());
     const bends = BAND_COLUMNS.map((_, i) => [Math.cos(BAND_BEND[i]), Math.sin(BAND_BEND[i])]);
-    const mouth = new THREE.Vector3();
-    const tuck = new THREE.Vector3();
     const controls = [];
     const curve = new THREE.CatmullRomCurve3(controls, false, 'centripetal');
 
@@ -388,25 +399,25 @@ export default function Lanyard({
         if (raycaster.ray.intersectPlane(dragPlane, intersection)) {
           const rawTarget = intersection.clone().add(dragOffset);
 
-          // Strong rubber-band elastic resistance ("lebih melawan"):
+          // Progressive high-tension rubber-band elastic resistance (sekenceng alfari.my.id):
           const pull = rawTarget.clone().sub(restPos);
           const pullDist = pull.length();
 
-          // Non-linear spring resistance factor: tightens up quickly like true rubber
-          const tensionFactor = 1 / (1 + pullDist * 0.9);
-          const resistedTarget = restPos.clone().add(pull.multiplyScalar(Math.max(0.32, tensionFactor)));
+          // Non-linear spring resistance factor: tightens up strongly like real elastic cord
+          const tensionFactor = 1 / (1 + pullDist * 1.6);
+          const resistedTarget = restPos.clone().add(pull.multiplyScalar(Math.max(0.24, tensionFactor)));
 
           // Clamped boundaries
-          const minX = isMobile ? -1.6 : -2.2;
-          const maxX = isMobile ? 1.6 : 2.2;
+          const minX = isMobile ? -1.4 : -1.8;
+          const maxX = isMobile ? 1.4 : 1.8;
           const minY = -1.2;
-          const maxY = anchor.y - 0.25;
+          const maxY = anchor.y - 0.7;
 
           resistedTarget.x = THREE.MathUtils.clamp(resistedTarget.x, minX, maxX);
           resistedTarget.y = THREE.MathUtils.clamp(resistedTarget.y, minY, maxY);
-          resistedTarget.z = THREE.MathUtils.clamp(resistedTarget.z, -0.5, 0.9);
+          resistedTarget.z = THREE.MathUtils.clamp(resistedTarget.z, -0.4, 0.8);
 
-          cardVel.copy(resistedTarget).sub(cardPos).multiplyScalar(0.75);
+          cardVel.copy(resistedTarget).sub(cardPos).multiplyScalar(0.72);
           cardPos.copy(resistedTarget);
         }
       }
@@ -421,12 +432,12 @@ export default function Lanyard({
         isPointerDown = false;
         setIsDragging(false);
 
-        // Tap / Click detection: if moved less than 30px within 450ms -> trigger flip!
-        if (!hasDragged || (dist < 30 && elapsed < 450)) {
+        // Tap / Click detection: if moved less than 32px within 450ms -> smoothly flip card!
+        if (!hasDragged || (dist < 32 && elapsed < 450)) {
           flipCard();
         } else {
           // Release drag: elastic snap-back momentum
-          cardVel.clampLength(0, 16);
+          cardVel.clampLength(0, 18);
         }
 
         canvas.releasePointerCapture?.(event.pointerId);
@@ -449,15 +460,15 @@ export default function Lanyard({
 
       // Card Motion Physics with STRONG rubber-band elastic spring resistance and snappy snap-back
       if (!isPointerDown) {
-        const springK = 80.0;
-        const damping = 0.86;
+        const springK = 110.0;
+        const damping = 0.85;
 
-        // Gentle resting breeze
-        const breezeX = Math.sin(elapsedTime * 1.3) * 0.05;
-        const breezeZ = Math.cos(elapsedTime * 1.5) * 0.03;
+        // Subtle realistic resting breeze
+        const breezeX = Math.sin(elapsedTime * 1.2) * 0.035;
+        const breezeZ = Math.cos(elapsedTime * 1.4) * 0.018;
 
         const forceX = -springK * (cardPos.x - breezeX);
-        const forceY = -springK * (cardPos.y - restY) - 9.8 * 0.05;
+        const forceY = -springK * (cardPos.y - restY) - 9.8 * 0.06;
         const forceZ = -springK * (cardPos.z - breezeZ);
 
         cardVel.x += forceX * dt;
@@ -467,12 +478,12 @@ export default function Lanyard({
         cardPos.addScaledVector(cardVel, dt);
       }
 
-      // Smooth, deterministic flip rotation (always lands squarely on 0 or 180 degrees)
+      // Smooth, deterministic flip rotation (lands cleanly on front or back)
       currentFlipAngle += (targetFlipAngle - currentFlipAngle) * 0.16;
 
       // Realistic Card Tilt Physics
-      const tiltZ = THREE.MathUtils.clamp(-cardVel.x * 0.22, -0.45, 0.45);
-      const tiltX = THREE.MathUtils.clamp(cardVel.y * 0.16 + (cardPos.z > 0 ? 0.04 : -0.04), -0.35, 0.35);
+      const tiltZ = THREE.MathUtils.clamp(-cardVel.x * 0.22, -0.40, 0.40);
+      const tiltX = THREE.MathUtils.clamp(cardVel.y * 0.16 + (cardPos.z > 0 ? 0.04 : -0.04), -0.30, 0.30);
 
       const euler = new THREE.Euler(tiltX, currentFlipAngle, tiltZ, 'YXZ');
       cardQuat.setFromEuler(euler);
@@ -481,40 +492,42 @@ export default function Lanyard({
       cardGroup.position.copy(cardPos);
       cardGroup.quaternion.copy(cardQuat);
 
-      // Top eyelet position
-      const eyeletPos = new THREE.Vector3(0, hangY, 0).applyQuaternion(cardQuat).add(cardPos);
+      // Unified Assembly: clamp and strap attachment points calculated directly from card transforms
+      const currentClampPos = clampOffset.clone().applyQuaternion(cardQuat).add(cardPos);
+      const currentAttachPos = strapAttachOffset.clone().applyQuaternion(cardQuat).add(cardPos);
 
-      clampGroup.position.copy(eyeletPos);
+      clampGroup.position.copy(currentClampPos);
       clampGroup.quaternion.copy(cardQuat);
 
-      // Short elastic rubber-band Verlet rope physics for strap
+      // Verlet Rope Physics for the Strap
       nodes[0].copy(anchor);
-      nodes[JOINTS].copy(eyeletPos);
+      nodes[JOINTS].copy(currentAttachPos);
 
       for (let i = 1; i < JOINTS; i++) {
         const cur = nodes[i];
         const prev = prevNodes[i];
-        const vel = cur.clone().sub(prev).multiplyScalar(0.91);
+        const vel = cur.clone().sub(prev).multiplyScalar(0.92);
         prev.copy(cur);
 
-        const wind = Math.sin(elapsedTime * 2.4 + i * 0.6) * 0.002;
+        const wind = Math.sin(elapsedTime * 2.2 + i * 0.5) * 0.0016;
         cur.add(vel);
-        cur.y += -9.8 * dt * dt * 0.4;
+        cur.y += -9.8 * dt * dt * 0.35;
         cur.x += wind;
       }
 
-      // Elastic distance constraints relaxation with spring compliance
-      const currentDist = anchor.distanceTo(eyeletPos);
-      const targetSegLen = THREE.MathUtils.lerp(restLen, currentDist / JOINTS, 0.65);
+      // Distance constraints relaxation
+      const currentTotalDist = anchor.distanceTo(currentAttachPos);
+      const segLen = currentTotalDist / JOINTS;
 
-      for (let pass = 0; pass < 8; pass++) {
+      // Taut, high-stiffness distance constraints relaxation (sekenceng alfari.my.id)
+      for (let pass = 0; pass < 14; pass++) {
         for (let i = 0; i < JOINTS; i++) {
           const p1 = nodes[i];
           const p2 = nodes[i + 1];
           const delta = p2.clone().sub(p1);
           const dist = delta.length();
           if (dist > 1e-5) {
-            const error = (dist - targetSegLen) * 0.5;
+            const error = (dist - segLen) * 0.8;
             delta.normalize().multiplyScalar(error);
             if (i > 0) p1.add(delta);
             if (i + 1 < JOINTS) p2.sub(delta);
@@ -522,73 +535,66 @@ export default function Lanyard({
         }
       }
 
-      // Update Ribbon Strap Geometry
-      const reach = EYELET_RADIUS + CLAMP_BODY + 0.04;
-      let guide = JOINTS - 1;
-      while (guide > 0 && nodes[guide].distanceTo(eyeletPos) < reach * 1.1) guide--;
-      const axis = new THREE.Vector3().subVectors(nodes[guide], eyeletPos);
-      if (axis.lengthSq() < 1e-8) axis.set(0, 1, 0).applyQuaternion(cardQuat);
-      axis.normalize();
-
-      mouth.copy(eyeletPos).addScaledVector(axis, reach);
-      tuck.copy(eyeletPos).addScaledVector(axis, EYELET_RADIUS + CLAMP_BODY * 0.35);
-
+      // Build smooth Catmull-Rom spline curve from anchor down to attachment point
       controls.length = 0;
-      for (let i = 0; i <= guide; i++) controls.push(nodes[i]);
-      controls.push(mouth, tuck);
-
+      for (let i = 0; i <= JOINTS; i++) {
+        controls.push(nodes[i]);
+      }
       curve.updateArcLengths();
-      for (let i = 0; i < SAMPLES; i++) curve.getPointAt(i / (SAMPLES - 1), points[i]);
 
-      const totalLen = curve.getLength();
-      const held = 1 - mouth.distanceTo(tuck) / Math.max(totalLen, 0.001);
+      for (let i = 0; i < SAMPLES; i++) {
+        curve.getPointAt(i / (SAMPLES - 1), points[i]);
+      }
+
+      // Update Ribbon Strap Geometry & UVs
       const posAttr = bandGeometry.getAttribute('position');
       const normAttr = bandGeometry.getAttribute('normal');
       const uvAttr = bandGeometry.getAttribute('uv');
       const columns = BAND_COLUMNS.length;
 
-      // Ribbon repeats tailored for short taut strap with seamless branding
-      const repeats = Math.max(0.75, totalLen / 1.15);
-      const widthScale = STRAP_WIDTH / Math.pow(Math.max(1, totalLen / Math.max(restLen * JOINTS, 0.001)), 0.35);
-
+      const cardFacing = new THREE.Vector3(0, 0, 1).applyQuaternion(cardQuat);
+      const camFacing = new THREE.Vector3(0, 0, 1);
       const tangent = new THREE.Vector3();
-      const toCam = new THREE.Vector3();
+      const currentNormal = new THREE.Vector3();
       const across = new THREE.Vector3();
-      const facing = new THREE.Vector3();
 
       for (let i = 0; i < SAMPLES; i++) {
         tangent.subVectors(points[Math.min(SAMPLES - 1, i + 1)], points[Math.max(0, i - 1)]);
         if (tangent.lengthSq() < 1e-12) tangent.set(0, -1, 0);
         tangent.normalize();
 
-        toCam.subVectors(camera.position, points[i]).normalize();
-        const side = sides[i].crossVectors(toCam, tangent);
-        if (side.lengthSq() < 1e-10) side.copy(i > 0 ? sides[i - 1] : new THREE.Vector3(1, 0, 0));
-        side.normalize();
-        if (i > 0 && side.dot(sides[i - 1]) < 0) side.negate();
+        // Smoothly interpolate strap normal from camera-facing at top to card-facing at bottom
+        const t = i / (SAMPLES - 1);
+        currentNormal.lerpVectors(camFacing, cardFacing, Math.pow(t, 1.4)).normalize();
 
-        const angle = -0.5 * Math.pow(Math.min(1, i / (SAMPLES - 1) / held), 1.3);
-        facing.crossVectors(tangent, side);
-        across.copy(side).multiplyScalar(Math.cos(angle)).addScaledVector(facing, Math.sin(angle));
-        facing.crossVectors(tangent, across);
+        // across points to +X (rightwards) so texture U=0 is on the left and U=1 is on the right (NO mirror reflection!)
+        across.crossVectors(currentNormal, tangent);
+        if (across.lengthSq() < 1e-8) {
+          across.set(1, 0, 0);
+        } else {
+          across.normalize();
+        }
 
         const p = points[i];
-        const v = (1 - i / (SAMPLES - 1)) * repeats;
+        // V texture coordinate: 1.0 at anchor (top with monogram S), 0.0 at clamp (bottom)
+        const v = 1.0 - t;
 
         for (let c = 0; c < columns; c++) {
           const k = i * columns + c;
-          const offset = (BAND_COLUMNS[c] - 0.5) * widthScale;
+          const offset = (BAND_COLUMNS[c] - 0.5) * STRAP_WIDTH;
           const [bendCos, bendSin] = bends[c];
+
           posAttr.setXYZ(k, p.x + across.x * offset, p.y + across.y * offset, p.z + across.z * offset);
           normAttr.setXYZ(
             k,
-            facing.x * bendCos + across.x * bendSin,
-            facing.y * bendCos + across.y * bendSin,
-            facing.z * bendCos + across.z * bendSin
+            currentNormal.x * bendCos + across.x * bendSin,
+            currentNormal.y * bendCos + across.y * bendSin,
+            currentNormal.z * bendCos + across.z * bendSin
           );
           uvAttr.setXY(k, BAND_COLUMNS[c], v);
         }
       }
+
       posAttr.needsUpdate = true;
       normAttr.needsUpdate = true;
       uvAttr.needsUpdate = true;
@@ -598,55 +604,60 @@ export default function Lanyard({
 
     animate();
 
-    const handleResize = () => {
-      if (!container) return;
-      width = container.clientWidth || 360;
-      height = container.clientHeight || 580;
-      const pr = Math.min(window.devicePixelRatio || 1, 2.5);
-      renderer.setPixelRatio(pr);
-      renderer.setSize(width, height);
-      camera.aspect = width / height;
-      camera.position.z = width < 640 ? 6.0 : 6.4;
-      camera.updateProjectionMatrix();
-    };
-    window.addEventListener('resize', handleResize);
+    // ResizeObserver ensures full HiDPI sharpness at whatever exact size the container renders
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const { width: w, height: h } = entry.contentRect;
+        if (w > 0 && h > 0) {
+          width = w;
+          height = h;
+          const pr = Math.min(window.devicePixelRatio || 1, 2.5);
+          renderer.setPixelRatio(pr);
+          renderer.setSize(w, h, false);
+          camera.aspect = w / h;
+          camera.position.z = (window.innerWidth || w) < 640 ? 5.5 : 5.8;
+          camera.updateProjectionMatrix();
+        }
+      }
+    });
+    resizeObserver.observe(container);
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
       canvas.removeEventListener('pointerdown', onPointerDown);
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerup', onPointerUp);
       window.removeEventListener('pointercancel', onPointerUp);
 
-      [bodyMesh, frontMesh, backMesh, ring, hitBox, clampMesh, eyelet, band].forEach((m) => m.geometry?.dispose());
+      [bodyMesh, frontMesh, backMesh, ring, hitBox, clampMesh, clampEyelet, band].forEach((m) => m.geometry?.dispose());
       [frontMaterial, backMaterial, edgeMaterial, metalMaterial, bandMaterial].forEach((m) => m.dispose());
       [frontTexture, backTexture, strapTexture].forEach((t) => t.dispose());
       renderer.dispose();
       if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
     };
-  }, [frontImage, backImage, strapImage, playBeep]);
+  }, [frontImage, backImage, strapImage]);
 
   return (
     <div
       ref={containerRef}
-      className={`relative w-full h-[480px] sm:h-[540px] md:h-[600px] lg:h-[640px] flex items-center justify-center select-none touch-none ${className}`}
+      className={`relative w-full h-[460px] sm:h-[500px] md:h-[540px] lg:h-[580px] flex items-center justify-center select-none touch-none ${className}`}
       style={style}
     >
       {/* Interactive Helper Hint Badge & Direct Flip Button */}
       <button
         type="button"
         onClick={handleBadgeClick}
-        className={`absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/95 hover:bg-slate-800 active:scale-95 backdrop-blur-md border border-sky-500/40 hover:border-sky-400 text-[11px] sm:text-xs text-slate-100 shadow-2xl transition-all duration-300 max-w-[94%] truncate z-20 cursor-pointer pointer-events-auto group ${
+        className={`absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3.5 py-1.5 sm:py-2 rounded-full bg-slate-900/95 hover:bg-slate-800 active:scale-95 backdrop-blur-md border border-rose-500/40 hover:border-rose-400 text-[11px] sm:text-xs text-slate-100 shadow-2xl transition-all duration-300 max-w-[94%] truncate z-20 cursor-pointer pointer-events-auto group ${
           isDragging ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
         }`}
         title="Klik untuk membalik ID Card"
       >
-        <span className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-ping shrink-0" />
+        <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping shrink-0" />
         <span className="truncate font-semibold group-hover:text-white transition-colors">
           Tarik bebas & Sentuh / Klik untuk Membalik ID Card
         </span>
-        <span className="inline-flex items-center gap-1 text-[10px] px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30 font-mono shrink-0 ml-1 font-bold">
+        <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 font-mono shrink-0 ml-1 font-bold">
           <svg className="w-3 h-3 transition-transform group-hover:rotate-180 duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
@@ -656,8 +667,8 @@ export default function Lanyard({
 
       {/* Active interaction indicator */}
       {isDragging && (
-        <div className="absolute top-4 right-4 text-[10px] uppercase font-mono px-3.5 py-1.5 rounded-full bg-sky-500/25 text-sky-200 border border-sky-500/50 backdrop-blur-md pointer-events-none animate-pulse z-20 flex items-center gap-2 shadow-xl shadow-sky-950/50">
-          <span className="w-2 h-2 rounded-full bg-sky-400 animate-ping" />
+        <div className="absolute top-4 right-4 text-[10px] uppercase font-mono px-3.5 py-1.5 rounded-full bg-rose-500/25 text-rose-200 border border-rose-500/50 backdrop-blur-md pointer-events-none animate-pulse z-20 flex items-center gap-2 shadow-xl shadow-rose-950/50">
+          <span className="w-2 h-2 rounded-full bg-rose-400 animate-ping" />
           <span className="font-bold tracking-wider">Tarik Bebas Aktif</span>
         </div>
       )}

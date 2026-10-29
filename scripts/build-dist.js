@@ -91,7 +91,7 @@ const indexHtmlContent = `<!DOCTYPE html>
     <link rel="stylesheet" crossorigin href="/build/${cssFile}">
     <script type="module" crossorigin src="/build/${jsFile}"></script>
   </head>
-  <body class="bg-[#050510] text-[#e2e8f0] selection:bg-sky-500/30 selection:text-white font-sans antialiased overflow-x-hidden min-h-screen w-full max-w-full">
+  <body class="bg-[#050510] text-[#e2e8f0] selection:bg-sky-500/30 selection:text-white font-sans antialiased overflow-x-clip min-h-screen w-full max-w-full">
     <div id="root"></div>
   </body>
 </html>
