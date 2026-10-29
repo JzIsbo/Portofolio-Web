@@ -66,10 +66,9 @@ export default function Portfolio({ playBeep }) {
         </p>
       </div>
 
-      {/* Tab Controls */}
-      <div className="w-full max-w-full min-w-0 overflow-x-auto pb-2 scrollbar-none mb-8 sm:mb-10 px-1">
-        <div className="flex justify-start sm:justify-center min-w-max mx-auto px-1">
-          <div className="inline-flex items-center gap-1 sm:gap-1.5 p-1 sm:p-1.5 rounded-full bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-lg shrink-0">
+      {/* Tab Controls - 1 Screen Non-Scroll on Mobile */}
+      <div className="w-full max-w-2xl mx-auto mb-8 sm:mb-10 px-1 sm:px-2">
+        <div className="grid grid-cols-4 gap-1 sm:gap-1.5 p-1 sm:p-1.5 rounded-2xl sm:rounded-full bg-slate-900/90 border border-slate-800 backdrop-blur-xl shadow-lg w-full">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -80,16 +79,35 @@ export default function Portfolio({ playBeep }) {
                   setActiveTab(tab.id);
                   playBeep?.(650);
                 }}
-                className={`flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 shrink-0 whitespace-nowrap active:scale-95 ${
+                className={`flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 py-2 sm:py-2 px-1 sm:px-3 rounded-xl sm:rounded-full font-semibold transition-all duration-200 w-full min-w-0 active:scale-95 ${
                   isActive
                     ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-md shadow-sky-500/25'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
                 }`}
               >
-                <Icon className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
-                <span>{tab.label}</span>
+                {/* Mobile: Icon + Badge in top row */}
+                <div className="flex items-center gap-1 sm:hidden">
+                  <Icon className="w-3.5 h-3.5 shrink-0" />
+                  <span
+                    className={`text-[8px] px-1 py-0.2 rounded-full font-mono leading-none ${
+                      isActive ? 'bg-white/25 text-white' : 'bg-slate-800 text-slate-400'
+                    }`}
+                  >
+                    {tab.count}
+                  </span>
+                </div>
+
+                {/* Desktop: Icon */}
+                <Icon className="hidden sm:block w-4 h-4 shrink-0" />
+
+                {/* Label */}
+                <span className="text-[10px] sm:text-xs md:text-sm font-semibold truncate leading-tight text-center">
+                  {tab.label}
+                </span>
+
+                {/* Desktop: Badge */}
                 <span
-                  className={`text-[9px] sm:text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                  className={`hidden sm:inline-flex text-[9px] sm:text-[10px] px-1.5 py-0.2 rounded-full font-mono shrink-0 leading-none ${
                     isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-400'
                   }`}
                 >
@@ -98,7 +116,6 @@ export default function Portfolio({ playBeep }) {
               </button>
             );
           })}
-          </div>
         </div>
       </div>
 
