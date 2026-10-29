@@ -63,7 +63,7 @@ export default function About({ playBeep }) {
   };
 
   return (
-    <section id="About" className="relative py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden w-full min-w-0">
+    <section id="About" className="relative pt-6 pb-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden w-full min-w-0">
       {/* Section Header */}
       <div className="flex flex-col items-center text-center space-y-2.5 sm:space-y-3 mb-12 sm:mb-16 w-full min-w-0">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/25 text-xs font-mono text-rose-400">

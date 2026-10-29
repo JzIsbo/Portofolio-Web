@@ -134,7 +134,7 @@ export default function App() {
       />
 
       {/* Main Content Sections */}
-      <main className="relative z-10 flex flex-col space-y-16 sm:space-y-24 w-full max-w-full min-w-0 overflow-x-hidden">
+      <main className="relative z-10 flex flex-col space-y-8 sm:space-y-24 w-full max-w-full min-w-0 overflow-x-hidden">
         {/* 1. Hero with Typewriter & 3D Interactive Lanyard */}
         <Hero playBeep={playBeep} />
 

@@ -42,7 +42,7 @@ export default function Hero({ playBeep }) {
   }, [charIndex, isDeleting, roleIndex]);
 
   return (
-    <section id="Home" className="relative min-h-[88vh] sm:min-h-[92vh] flex items-center justify-center pt-20 sm:pt-28 pb-8 sm:pb-20 overflow-hidden">
+    <section id="Home" className="relative min-h-[88vh] sm:min-h-[92vh] flex items-center justify-center pt-20 sm:pt-28 pb-2 sm:pb-20 overflow-hidden">
       {/* Background radial ambient lights */}
       <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-72 sm:w-96 h-72 sm:h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute top-1/3 right-1/4 w-60 sm:w-80 h-60 sm:h-80 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
@@ -142,11 +142,7 @@ export default function Hero({ playBeep }) {
         <div className="lg:col-span-5 relative flex items-center justify-center w-full">
           <div className="w-full relative">
             <div className="absolute inset-0 bg-gradient-to-b from-sky-500/10 via-purple-600/10 to-transparent rounded-3xl blur-2xl pointer-events-none" />
-            <Lanyard
-              frontImage="/assets/frontCard.png"
-              backImage="/assets/backCard.png"
-              strapImage="/assets/band.png"
-            />
+            <Lanyard playBeep={playBeep} />
           </div>
         </div>
       </div>
